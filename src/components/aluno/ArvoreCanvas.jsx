@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import { mix, mulberry32, rgba, token } from '../../lib/cor.js'
+import { desenharEnfeites, desenharMato } from './enfeitesCanvas.js'
 
 /**
  * A arvore, desenhada por codigo a cada frame. Sem sprites, sem imagens,
@@ -126,7 +127,7 @@ function gerar(growth, tempo, vento) {
 }
 
 const ArvoreCanvas = forwardRef(function ArvoreCanvas(
-  { crescimento, vitalidade, competencias, totalCompetencias, descricao },
+  { crescimento, vitalidade, competencias, totalCompetencias, mato, enfeites, descricao },
   ref,
 ) {
   const cvRef = useRef(null)
@@ -142,6 +143,9 @@ const ArvoreCanvas = forwardRef(function ArvoreCanvas(
     atual: [],
     cross: 1,
     total: 6,
+    // Jardim: altura do mato (0..1,5) e enfeites pousados na arvore.
+    mato: 0,
+    enfeites: [],
     folhas: 0,
     pulso: 0,
     parts: [],
@@ -173,6 +177,12 @@ const ArvoreCanvas = forwardRef(function ArvoreCanvas(
     s.total = totalCompetencias
     s.cross = 0
   }, [competencias, totalCompetencias])
+
+  /* ---- jardim: mato e enfeites ---- */
+  useEffect(() => {
+    S.current.mato = mato
+    S.current.enfeites = enfeites
+  }, [mato, enfeites])
 
   /* ---- acoes imperativas ---- */
   useImperativeHandle(ref, () => ({
@@ -447,6 +457,10 @@ const ArvoreCanvas = forwardRef(function ArvoreCanvas(
       }
       for (const d of fila) if (!d.flor) pintar(d)
       for (const d of fila) if (d.flor) pintar(d)
+
+      // Mato na frente do tronco, e os enfeites pousados por cima de tudo.
+      desenharMato(ctx, baseX, baseY, raio, s.mato, k, pal)
+      desenharEnfeites(ctx, arv, TX, TY, k, s.enfeites)
 
       // particulas
       for (let i = s.parts.length - 1; i >= 0; i--) {

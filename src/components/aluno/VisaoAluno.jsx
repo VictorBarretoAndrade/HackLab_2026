@@ -3,8 +3,11 @@ import { ALUNO, PROJETOS_INICIAIS, ROTULO_STATUS } from '../../data/aluno.js'
 import { skillPorId } from '../../data/skills.js'
 import { HORAS_EXTENSAO, NIVEIS, n0 } from '../../lib/curriculo.js'
 import { derivar, legendaArvore } from '../../lib/motorAluno.js'
+import { useJardim } from '../../hooks/useJardim.js'
+import { enfeitePorId } from '../../data/enfeites.js'
 import { useAvisar } from '../ui/Toasts.jsx'
 import ArvoreCanvas from './ArvoreCanvas.jsx'
+import Jardim from './Jardim.jsx'
 import ListaProjetos from './ListaProjetos.jsx'
 import PainelSkills from './PainelSkills.jsx'
 import Registro from './Registro.jsx'
@@ -72,6 +75,43 @@ export default function VisaoAluno() {
   const logar = useCallback((verbo, texto, cor) => {
     setRegistro((r) => [{ id: ++seq.current, hora: agora(), verbo, texto, cor }, ...r])
   }, [])
+
+  /* ---------- jardim: capina semanal, moedas e enfeites ---------- */
+  const { jardim, estado, enfeites, acoes: acoesJardim } = useJardim()
+
+  const jardimUI = useMemo(
+    () => ({
+      limpar() {
+        const r = acoesJardim.limpar()
+        if (r.ganho <= 0) return
+        arvore.current?.faiscar(12, '#E8B44A')
+        logar('Capina', `+${r.ganho} moedas`, '#E8B44A')
+        avisar(
+          r.sequencia > 1
+            ? `Pé limpo! +${r.ganho} moedas · ${r.sequencia} semanas seguidas`
+            : `Pé limpo! +${r.ganho} moedas`,
+          '#E8B44A',
+        )
+      },
+      comprar(e) {
+        if (!acoesJardim.comprar(e)) return
+        arvore.current?.faiscar(14, e.cor)
+        logar('Comprou', e.nome, e.cor)
+        avisar(`${e.nome} instalado na árvore.`, e.cor)
+      },
+      alternar(id) {
+        acoesJardim.alternar(id)
+        const e = enfeitePorId(id)
+        const guardando = !jardim.guardados.includes(id)
+        avisar(guardando ? `${e.nome} guardado.` : `${e.nome} de volta à árvore.`, e.cor)
+      },
+      adiantar() {
+        acoesJardim.adiantar()
+        avisar('Uma semana adiantada (demonstração).', 'var(--accent)')
+      },
+    }),
+    [acoesJardim, avisar, logar, jardim.guardados],
+  )
 
   const aplicar = useCallback(
     (idProjeto, novoStatus) => {
@@ -180,6 +220,8 @@ export default function VisaoAluno() {
             vitalidade={d.vitalidade / 100}
             competencias={competencias}
             totalCompetencias={d.skills.length}
+            mato={estado.mato}
+            enfeites={enfeites}
             descricao={resumo}
           />
           <p className="palco-legenda">{legendaArvore(d)}</p>
@@ -279,6 +321,7 @@ export default function VisaoAluno() {
           />
         </div>
         <div className="aluno-col">
+          <Jardim jardim={jardim} estado={estado} acoes={jardimUI} />
           <PainelSkills skills={d.skills} novas={novas} />
           <Registro itens={registro} />
         </div>

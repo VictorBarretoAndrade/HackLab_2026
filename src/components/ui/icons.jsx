@@ -79,6 +79,22 @@ export const Documento = (p) => (
   </svg>
 )
 
+export const Moeda = (p) => (
+  <svg {...base} strokeWidth="1.9" {...p}>
+    <circle cx="12" cy="12" r="8.4" />
+    <path d="M14.4 9.4a3 3 0 0 0-4.8 1.1c-.5 1.6 1 2.2 2.4 2.6s2.9 1 2.4 2.6a3 3 0 0 1-4.8 1.1" />
+    <path d="M12 6.6v1.4M12 16v1.4" />
+  </svg>
+)
+
+export const Tesoura = (p) => (
+  <svg {...base} strokeWidth="1.9" {...p}>
+    <circle cx="6.5" cy="17.5" r="2.6" />
+    <circle cx="17.5" cy="17.5" r="2.6" />
+    <path d="M8.4 15.6L18.5 4M15.6 15.6L5.5 4" />
+  </svg>
+)
+
 export const Sol = (p) => (
   <svg {...base} strokeWidth="2" {...p}>
     <circle cx="12" cy="12" r="4.2" />

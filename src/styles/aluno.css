@@ -543,3 +543,178 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ============================================================
+   Jardim: capina semanal e lojinha de enfeites
+   ============================================================ */
+
+.saldo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px 4px 8px;
+  border-radius: 99px;
+  background: rgba(232, 180, 74, 0.16);
+  color: #8a6410;
+  font-size: 13px;
+}
+
+:root[data-theme='dark'] .saldo {
+  color: #f0c464;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .saldo {
+    color: #f0c464;
+  }
+}
+
+.saldo svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.saldo b {
+  font-weight: 700;
+}
+
+.capina {
+  display: grid;
+  gap: 13px;
+  padding: 12px 20px 16px;
+}
+
+.capina-acao {
+  display: flex;
+  align-items: center;
+  gap: 10px 14px;
+  flex-wrap: wrap;
+}
+
+.capina-acao .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.capina-acao .btn svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.capina-acao .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.capina-acao .btn:disabled:hover {
+  border-color: var(--hairline);
+  color: var(--ink-2);
+  transform: none;
+}
+
+.sequencia {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---------- lojinha ---------- */
+.loja {
+  display: grid;
+  gap: 1px;
+  background: var(--grid);
+  border-top: 1px solid var(--grid);
+}
+
+.enfeite {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 20px;
+  background: var(--surface);
+}
+
+.enfeite[data-comprado='true'] {
+  background: color-mix(in srgb, var(--accent-soft) 45%, var(--surface));
+}
+
+.amostra {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  background: var(--o);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--o) 45%, transparent);
+}
+
+.enfeite-txt {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.enfeite-txt b {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.enfeite-txt span {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.btn.mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.btn.mini svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+}
+
+.btn.mini:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn.mini:disabled:hover {
+  border-color: var(--hairline);
+  color: var(--ink-2);
+  transform: none;
+}
+
+.jardim-pe {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 13px 20px 16px;
+  border-top: 1px solid var(--grid);
+}
+
+.jardim-pe .nota {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+@media (max-width: 460px) {
+  .enfeite {
+    grid-template-columns: 26px minmax(0, 1fr);
+  }
+  .enfeite .btn.mini {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
