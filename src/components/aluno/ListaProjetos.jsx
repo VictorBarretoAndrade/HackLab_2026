@@ -6,6 +6,9 @@ import { Chip } from '../ui/Chip.jsx'
 export default function ListaProjetos({ projetos, skills, onAcao, onReiniciar, horasSemestre }) {
   const totalHoras = projetos.reduce((s, p) => s + p.horas, 0)
 
+  // Alvo do tour: o primeiro projeto que tenha um botao de concluir.
+  const idAlvo = projetos.find((p) => p.status === 'ativo' || p.status === 'atrasado')?.id
+
   return (
     <section className="card">
       <div className="chead">
@@ -59,6 +62,9 @@ export default function ListaProjetos({ projetos, skills, onAcao, onReiniciar, h
                     type="button"
                     className={'btn ' + a.variante}
                     key={a.para}
+                    data-tour={
+                      p.id === idAlvo && a.variante === 'primary' ? 'concluir' : undefined
+                    }
                     onClick={() => onAcao(p.id, a.para)}
                   >
                     {a.rotulo}

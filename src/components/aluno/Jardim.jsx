@@ -51,6 +51,7 @@ export default function Jardim({ jardim, estado, acoes }) {
           <button
             type="button"
             className="btn primary"
+            data-tour="capinar"
             onClick={acoes.limpar}
             disabled={!pode}
             title={pode ? undefined : `Disponível em ${faltaEmTexto(faltam)}`}

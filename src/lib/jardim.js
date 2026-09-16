@@ -15,14 +15,14 @@ export const SEMANA = 7 * 24 * 60 * 60 * 1000
  * ECONOMIA DE TESTE, nao de producao.
  *
  * Esta build existe para as pessoas experimentarem a plataforma, entao o
- * dinheiro e generoso de proposito: quem abre ja consegue comprar quase metade
- * da loja, e em quatro capinas compra tudo. Num lancamento real, valores mais
+ * dinheiro e generoso de proposito: quem abre ja consegue comprar a loja inteira
+ * sem capinar uma vez sequer. Num lancamento real, valores mais
  * proximos de 25 / +5 / teto 55 fariam a lojinha durar um semestre.
  *
- * Custo total da loja: 615 moedas.
- * Saldo inicial 300 + capinas de 60, 75, 90 e 105 = 630 na quarta semana.
+ * Custo total da loja: 615 moedas. O saldo inicial cobre TUDO de primeira,
+ * com folga: o testador nao deve esbarrar em preco nenhum.
  */
-export const SALDO_INICIAL = 300
+export const SALDO_INICIAL = 800
 export const RECOMPENSA_BASE = 60
 export const BONUS_SEQUENCIA = 15
 export const RECOMPENSA_MAX = 120
@@ -34,7 +34,7 @@ export const TOLERANCIA = SEMANA * 2
  * Sobe quando a economia muda. O estado salvo de uma versao anterior e
  * descartado, senao quem ja testou ficaria preso ao saldo antigo.
  */
-export const VERSAO_JARDIM = 2
+export const VERSAO_JARDIM = 3
 
 export const JARDIM_INICIAL = {
   versao: VERSAO_JARDIM,

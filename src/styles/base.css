@@ -580,93 +580,94 @@ tbody tr:last-child td {
   height: 16px;
 }
 
-/* ---------- tutorial de primeira abertura ---------- */
-.tutorial-fundo {
+/* ---------- tour de primeira abertura ----------
+   O destaque e feito com um box-shadow gigante em volta do recorte: assim o
+   elemento real fica visivel e iluminado, e todo o resto escurece, sem
+   precisar duplicar o botao dentro de um modal. */
+
+.tour-bloqueio {
   position: fixed;
   inset: 0;
-  z-index: 90;
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  background: color-mix(in srgb, var(--plane) 72%, transparent);
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  animation: fundo-entra 0.25s ease both;
+  z-index: 88;
+  cursor: pointer;
 }
 
-.tutorial {
-  width: min(460px, 100%);
+.tour-foco {
+  position: fixed;
+  z-index: 89;
+  border-radius: 12px;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 9999px rgba(8, 20, 17, 0.62),
+    0 0 0 3px var(--accent);
+  transition:
+    top 0.32s cubic-bezier(0.2, 0.9, 0.3, 1),
+    left 0.32s cubic-bezier(0.2, 0.9, 0.3, 1),
+    width 0.32s cubic-bezier(0.2, 0.9, 0.3, 1),
+    height 0.32s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.tour-balao {
+  position: fixed;
+  z-index: 92;
+  width: min(340px, calc(100vw - 24px));
   background: var(--surface);
   border: 1px solid var(--hairline);
-  border-radius: 18px;
+  border-radius: 16px;
   box-shadow: var(--shadow-lift);
-  padding: 22px 24px 18px;
-  animation: tutorial-entra 0.34s cubic-bezier(0.2, 0.9, 0.3, 1.05) both;
+  padding: 16px 18px 14px;
+  animation: balao-entra 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.05) both;
 }
 
-.tutorial-topo {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  margin-bottom: 13px;
+/* Sem alvo na tela: vira cartao centralizado em vez de apontar para o vazio. */
+.tour-balao.centrado {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.tutorial-ico {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  background: var(--accent-soft);
-  color: var(--accent);
-  flex: none;
-}
-
-.tutorial-ico svg {
-  width: 19px;
-  height: 19px;
-}
-
-.tutorial h2 {
+.tour-balao h2 {
+  margin-top: 3px;
   font-family: 'Fraunces', Georgia, serif;
   font-weight: 700;
-  font-size: 21px;
-  line-height: 1.15;
+  font-size: 19px;
+  line-height: 1.18;
   letter-spacing: -0.015em;
   font-variation-settings: 'SOFT' 40, 'WONK' 1;
 }
 
-.tutorial-txt {
-  margin: 9px 0 0;
-  font-size: 14px;
+.tour-txt {
+  margin: 7px 0 0;
+  font-size: 13.5px;
   line-height: 1.55;
   color: var(--ink-2);
 }
 
-.tutorial-acao {
-  margin: 12px 0 0;
-  padding: 9px 12px;
-  border-radius: 10px;
+.tour-acao {
+  margin: 11px 0 0;
+  padding: 8px 11px;
+  border-radius: 9px;
   background: var(--surface-2);
   border-left: 3px solid var(--accent);
-  font-size: 13px;
+  font-size: 12.5px;
+  line-height: 1.45;
   color: var(--ink);
 }
 
-.tutorial-pe {
+.tour-pe {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  margin-top: 18px;
+  gap: 12px;
+  margin-top: 14px;
 }
 
-.tutorial-pontos {
+.tour-pontos {
   display: flex;
   gap: 6px;
 }
 
-.tutorial-pontos span {
+.tour-pontos span {
   width: 7px;
   height: 7px;
   border-radius: 99px;
@@ -676,33 +677,22 @@ tbody tr:last-child td {
     width 0.25s;
 }
 
-.tutorial-pontos span[data-ativo='true'] {
+.tour-pontos span[data-ativo='true'] {
   width: 20px;
   background: var(--accent);
 }
 
-.tutorial-botoes {
+.tour-botoes {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 13px;
 }
 
-@keyframes fundo-entra {
+@keyframes balao-entra {
   from {
     opacity: 0;
   }
   to {
     opacity: 1;
-  }
-}
-
-@keyframes tutorial-entra {
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: none;
   }
 }

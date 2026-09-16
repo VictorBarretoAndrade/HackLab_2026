@@ -65,6 +65,15 @@ export default function App() {
     setVisao(v)
   }
 
+  // Dois dos tres alvos do tour vivem na visao do aluno. Se o tour abrir com a
+  // coordenacao na tela, os destaques apontariam para o vazio.
+  useEffect(() => {
+    if (tutorial && visaoDaHash() !== 'aluno') {
+      window.location.hash = '#/aluno'
+      setVisao('aluno')
+    }
+  }, [tutorial])
+
   return (
     <ToastsProvider>
       <TooltipProvider>
@@ -80,7 +89,7 @@ export default function App() {
               </span>
             </div>
 
-            <div className="tabs" role="tablist" aria-label="Escolher visão">
+            <div className="tabs" role="tablist" aria-label="Escolher visão" data-tour="abas">
               {Object.entries(VISOES).map(([id, v]) => (
                 <button
                   type="button"
