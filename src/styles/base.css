@@ -536,3 +536,173 @@ tbody tr:last-child td {
     justify-content: center;
   }
 }
+
+/* ---------- botao de texto ---------- */
+.link {
+  font: inherit;
+  font-size: inherit;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.link:hover {
+  filter: brightness(1.15);
+}
+
+/* ---------- botao de ajuda na barra ---------- */
+.ajuda {
+  width: 32px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    background-color 0.18s,
+    color 0.18s;
+}
+
+.ajuda:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.ajuda svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---------- tutorial de primeira abertura ---------- */
+.tutorial-fundo {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: color-mix(in srgb, var(--plane) 72%, transparent);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  animation: fundo-entra 0.25s ease both;
+}
+
+.tutorial {
+  width: min(460px, 100%);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lift);
+  padding: 22px 24px 18px;
+  animation: tutorial-entra 0.34s cubic-bezier(0.2, 0.9, 0.3, 1.05) both;
+}
+
+.tutorial-topo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 13px;
+}
+
+.tutorial-ico {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  color: var(--accent);
+  flex: none;
+}
+
+.tutorial-ico svg {
+  width: 19px;
+  height: 19px;
+}
+
+.tutorial h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  font-variation-settings: 'SOFT' 40, 'WONK' 1;
+}
+
+.tutorial-txt {
+  margin: 9px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.tutorial-acao {
+  margin: 12px 0 0;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border-left: 3px solid var(--accent);
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.tutorial-pe {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.tutorial-pontos {
+  display: flex;
+  gap: 6px;
+}
+
+.tutorial-pontos span {
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--hairline);
+  transition:
+    background-color 0.25s,
+    width 0.25s;
+}
+
+.tutorial-pontos span[data-ativo='true'] {
+  width: 20px;
+  background: var(--accent);
+}
+
+.tutorial-botoes {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+@keyframes fundo-entra {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes tutorial-entra {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

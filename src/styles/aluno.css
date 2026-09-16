@@ -718,3 +718,31 @@
     justify-self: start;
   }
 }
+
+/* Enfeite comprado mas guardado: some o destaque e a amostra fica apagada. */
+.enfeite[data-posto='false'][data-comprado='true'] {
+  background: var(--surface);
+}
+
+.enfeite[data-posto='false'][data-comprado='true'] .amostra {
+  opacity: 0.4;
+  box-shadow: none;
+}
+
+.jardim-pe {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+.jardim-botoes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.jardim-pe .nota {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}

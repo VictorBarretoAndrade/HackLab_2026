@@ -11,15 +11,34 @@
 
 export const SEMANA = 7 * 24 * 60 * 60 * 1000
 
-export const RECOMPENSA_BASE = 25
-export const BONUS_SEQUENCIA = 5
-export const RECOMPENSA_MAX = 55
+/**
+ * ECONOMIA DE TESTE, nao de producao.
+ *
+ * Esta build existe para as pessoas experimentarem a plataforma, entao o
+ * dinheiro e generoso de proposito: quem abre ja consegue comprar quase metade
+ * da loja, e em quatro capinas compra tudo. Num lancamento real, valores mais
+ * proximos de 25 / +5 / teto 55 fariam a lojinha durar um semestre.
+ *
+ * Custo total da loja: 615 moedas.
+ * Saldo inicial 300 + capinas de 60, 75, 90 e 105 = 630 na quarta semana.
+ */
+export const SALDO_INICIAL = 300
+export const RECOMPENSA_BASE = 60
+export const BONUS_SEQUENCIA = 15
+export const RECOMPENSA_MAX = 120
 
 /** Alem de duas semanas sem aparecer, a sequencia zera. */
 export const TOLERANCIA = SEMANA * 2
 
+/**
+ * Sobe quando a economia muda. O estado salvo de uma versao anterior e
+ * descartado, senao quem ja testou ficaria preso ao saldo antigo.
+ */
+export const VERSAO_JARDIM = 2
+
 export const JARDIM_INICIAL = {
-  moedas: 0,
+  versao: VERSAO_JARDIM,
+  moedas: SALDO_INICIAL,
   sequencia: 0,
   ultimaLimpeza: null, // null = nunca limpou, entao ja tem mato esperando
   deslocamento: 0, // ms somados ao relogio, so para a demo
@@ -82,6 +101,16 @@ export function alternar(j, id) {
       ? j.guardados.filter((x) => x !== id)
       : [...j.guardados, id],
   }
+}
+
+/** Tira da arvore tudo o que estiver posto, sem perder a compra. */
+export function tirarTodos(j) {
+  return { ...j, guardados: [...j.comprados] }
+}
+
+/** Devolve a arvore tudo o que estiver guardado. */
+export function porTodos(j) {
+  return { ...j, guardados: [] }
 }
 
 /** Ids dos enfeites que devem aparecer no canvas. */

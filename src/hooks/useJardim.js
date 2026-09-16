@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   JARDIM_INICIAL,
+  VERSAO_JARDIM,
   adiantarSemana,
   alternar,
   comprar,
   estadoJardim,
   limpar,
   naArvore,
+  porTodos,
+  tirarTodos,
 } from '../lib/jardim.js'
 
 const CHAVE = 'raiz:jardim'
@@ -14,8 +17,9 @@ const CHAVE = 'raiz:jardim'
 function carregar() {
   try {
     const bruto = JSON.parse(localStorage.getItem(CHAVE))
-    if (bruto && typeof bruto === 'object') {
-      // Mescla com o inicial: uma versao futura pode ter campos novos.
+    // Estado de uma versao anterior da economia e descartado: senao quem ja
+    // testou a build antiga ficaria sem o saldo de boas-vindas.
+    if (bruto && typeof bruto === 'object' && bruto.versao === VERSAO_JARDIM) {
       return {
         ...JARDIM_INICIAL,
         ...bruto,
@@ -58,6 +62,8 @@ export function useJardim() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const estado = useMemo(() => estadoJardim(jardim), [jardim, tick])
 
+  const zerar = useCallback(() => setJardim({ ...JARDIM_INICIAL }), [])
+
   const acoes = useMemo(
     () => ({
       limpar() {
@@ -66,19 +72,25 @@ export function useJardim() {
         return r
       },
       comprar(enfeite) {
-        const antes = jardim
         const depois = comprar(jardim, enfeite)
-        if (depois !== antes) setJardim(depois)
-        return depois !== antes
+        if (depois !== jardim) setJardim(depois)
+        return depois !== jardim
       },
       alternar(id) {
         setJardim((j) => alternar(j, id))
       },
+      tirarTodos() {
+        setJardim(tirarTodos)
+      },
+      porTodos() {
+        setJardim(porTodos)
+      },
       adiantar() {
         setJardim(adiantarSemana)
       },
+      zerar,
     }),
-    [jardim],
+    [jardim, zerar],
   )
 
   const chaveEnfeites = naArvore(jardim).join(',')

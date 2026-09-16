@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react'
 import { useTema } from './hooks/useTema.js'
 import { ToastsProvider } from './components/ui/Toasts.jsx'
 import { TooltipProvider } from './components/ui/Tooltip.jsx'
-import { Arvore, Lua, Monitor, Painel, Sol } from './components/ui/icons.jsx'
+import { Ajuda, Arvore, Lua, Monitor, Painel, Sol } from './components/ui/icons.jsx'
+import Tutorial from './components/ui/Tutorial.jsx'
 import VisaoAluno from './components/aluno/VisaoAluno.jsx'
 import VisaoGestor from './components/gestor/VisaoGestor.jsx'
+
+const CHAVE_TUTORIAL = 'raiz:tutorial'
 
 const VISOES = {
   aluno: { rotulo: 'Aluno', Icone: Arvore },
@@ -32,6 +35,24 @@ function visaoDaHash() {
 export default function App() {
   const [visao, setVisao] = useState(visaoDaHash)
   const [tema, setTema] = useTema()
+
+  // Abre sozinho na primeira visita; depois so pelo botao de ajuda.
+  const [tutorial, setTutorial] = useState(() => {
+    try {
+      return localStorage.getItem(CHAVE_TUTORIAL) !== 'visto'
+    } catch {
+      return true
+    }
+  })
+
+  const fecharTutorial = () => {
+    setTutorial(false)
+    try {
+      localStorage.setItem(CHAVE_TUTORIAL, 'visto')
+    } catch {
+      /* sem persistencia: reaparece na proxima visita */
+    }
+  }
 
   useEffect(() => {
     const sincronizar = () => setVisao(visaoDaHash())
@@ -76,6 +97,16 @@ export default function App() {
               ))}
             </div>
 
+            <button
+              type="button"
+              className="ajuda"
+              onClick={() => setTutorial(true)}
+              aria-label="Ver o tutorial de novo"
+              title="Ver o tutorial de novo"
+            >
+              <Ajuda />
+            </button>
+
             <div className="theme-toggle" role="group" aria-label="Tema da interface">
               {TEMAS.map((t) => (
                 <button
@@ -96,6 +127,8 @@ export default function App() {
         <main id="painel" role="tabpanel" aria-labelledby={'aba-' + visao} tabIndex={-1}>
           {visao === 'gestor' ? <VisaoGestor /> : <VisaoAluno />}
         </main>
+
+        {tutorial ? <Tutorial aoFechar={fecharTutorial} /> : null}
       </TooltipProvider>
     </ToastsProvider>
   )

@@ -103,11 +103,23 @@ export default function VisaoAluno() {
         acoesJardim.alternar(id)
         const e = enfeitePorId(id)
         const guardando = !jardim.guardados.includes(id)
-        avisar(guardando ? `${e.nome} guardado.` : `${e.nome} de volta à árvore.`, e.cor)
+        avisar(guardando ? `${e.nome} tirado da árvore.` : `${e.nome} de volta à árvore.`, e.cor)
+      },
+      tirarTodos() {
+        acoesJardim.tirarTodos()
+        avisar('Enfeites guardados. As compras continuam suas.', 'var(--accent)')
+      },
+      porTodos() {
+        acoesJardim.porTodos()
+        avisar('Todos os enfeites voltaram à árvore.', 'var(--accent)')
       },
       adiantar() {
         acoesJardim.adiantar()
         avisar('Uma semana adiantada (demonstração).', 'var(--accent)')
+      },
+      zerar() {
+        acoesJardim.zerar()
+        avisar('Jardim reiniciado: saldo e enfeites de volta ao início.', 'var(--accent)')
       },
     }),
     [acoesJardim, avisar, logar, jardim.guardados],
