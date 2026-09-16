@@ -1,0 +1,453 @@
+/* ============================================================
+   Visao da coordenacao — KPIs, barras, alertas, graficos
+   ============================================================ */
+
+.gestor-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 28px;
+}
+
+.gestor-hero h1 {
+  font-size: clamp(22px, 3vw, 30px);
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+.gestor-hero .lede {
+  margin: 5px 0 0;
+  color: var(--ink-2);
+  font-size: 14px;
+  max-width: 62ch;
+}
+
+.regra {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  font-size: 12.5px;
+  color: var(--ink-2);
+  max-width: 350px;
+}
+
+.regra svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: var(--accent);
+}
+
+.regra b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ---------- filtro ---------- */
+.filtros {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filtros .rot {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.seg {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 11px;
+  flex-wrap: wrap;
+}
+
+.seg button {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 13px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition:
+    background-color 0.18s,
+    color 0.18s;
+}
+
+.seg button:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.seg button[aria-pressed='true'] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.seg .kdot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--k);
+}
+
+/* ---------- KPIs ---------- */
+.kpis {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+.tile {
+  padding: 18px 20px 17px;
+  display: grid;
+  gap: 4px;
+  align-content: start;
+}
+
+.tile .rot {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* figuras grandes usam algarismos proporcionais, nao tabulares */
+.tile .val {
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.tile.hero .val {
+  font-size: 56px;
+}
+
+.tile .nota {
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+.tile .track {
+  height: 7px;
+  margin-top: 8px;
+}
+
+.tile .track > i {
+  background: var(--series);
+}
+
+/* ---------- barras horizontais ---------- */
+.barras {
+  --namew: 190px;
+  --valw: 62px;
+  --gap: 12px;
+  --pad: 20px;
+  position: relative;
+  padding: 14px var(--pad) 8px;
+}
+
+.barra {
+  display: grid;
+  grid-template-columns: var(--namew) minmax(0, 1fr) var(--valw);
+  gap: var(--gap);
+  align-items: center;
+  padding: 5px 0;
+}
+
+.barra .nm {
+  font-size: 13.5px;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barra .nm small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.pista {
+  position: relative;
+  height: 18px;
+  background: var(--track);
+  border-radius: 3px;
+}
+
+.pista > i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 0 4px 4px 0;
+  transition: width 0.6s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.pista > i[data-faixa='bom'] {
+  background: var(--good);
+}
+.pista > i[data-faixa='atencao'] {
+  background: var(--warn);
+}
+.pista > i[data-faixa='critico'] {
+  background: var(--crit);
+}
+.pista > i[data-faixa='serie'] {
+  background: var(--series);
+}
+
+.barra .vl {
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: right;
+  color: var(--ink);
+}
+
+/* Linha de meta: cai a 100/120 = 83,333% da pista. */
+.linha-meta {
+  position: absolute;
+  top: 40px;
+  bottom: 30px;
+  left: calc(
+    var(--pad) + var(--namew) + var(--gap) +
+      (100% - var(--pad) * 2 - var(--namew) - var(--valw) - var(--gap) * 2) * 0.83333
+  );
+  width: 1px;
+  background: var(--axis);
+  pointer-events: none;
+}
+
+.linha-meta span {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.barras-pe {
+  padding: 6px 20px 16px;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ---------- alertas ---------- */
+.alertas {
+  display: grid;
+}
+
+.alerta {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 11px;
+  padding: 13px 20px;
+  border-top: 1px solid var(--grid);
+}
+
+.alerta:first-child {
+  border-top: 0;
+}
+
+.alerta .ic {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+}
+
+.alerta .ic svg {
+  width: 14px;
+  height: 14px;
+}
+
+.alerta[data-sev='crit'] .ic {
+  background: var(--crit-soft);
+  color: var(--crit-ink);
+}
+.alerta[data-sev='warn'] .ic {
+  background: var(--warn-soft);
+  color: var(--warn-ink);
+}
+.alerta[data-sev='good'] .ic {
+  background: var(--good-soft);
+  color: var(--good-ink);
+}
+
+.alerta h3 {
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.alerta p {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+
+.alerta .quem {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+  display: block;
+}
+
+/* ---------- alternador grafico/tabela ---------- */
+.vista {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--hairline);
+  border-radius: 9px;
+}
+
+.vista button {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.vista button[aria-pressed='true'] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ---------- grafico de linha ---------- */
+.plot {
+  padding: 8px 12px 6px;
+  position: relative;
+}
+
+.plot svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+.plot text {
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+.legenda {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 0 20px 16px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+
+.legenda span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.legenda i {
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--k);
+}
+
+/* ---------- mini barra da tabela ---------- */
+.minibar {
+  display: inline-block;
+  vertical-align: middle;
+  width: 68px;
+  height: 7px;
+  background: var(--track);
+  border-radius: 2px;
+  margin-right: 9px;
+  position: relative;
+}
+
+.minibar > i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--series);
+  border-radius: 0 3px 3px 0;
+}
+
+.minibar[data-alerta='true'] > i {
+  background: var(--crit);
+}
+
+/* ---------- grades de secao ---------- */
+.linha-7-5 {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.linha-5-7 {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 18px;
+  align-items: start;
+}
+
+@media (max-width: 1080px) {
+  .kpis {
+    grid-template-columns: 1fr 1fr;
+  }
+  .linha-7-5,
+  .linha-5-7 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+  .tile.hero .val {
+    font-size: 46px;
+  }
+  .barras {
+    --namew: 118px;
+    --valw: 52px;
+    --gap: 9px;
+    --pad: 14px;
+  }
+  .barra .nm {
+    font-size: 12.5px;
+  }
+}

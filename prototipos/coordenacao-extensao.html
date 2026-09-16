@@ -1,0 +1,875 @@
+<title>Coordenação de Extensão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+  /* ===== tokens — tema claro completo em :root ===== */
+  :root {
+    --plane:        #EEF2F0;
+    --surface:      #FBFCFA;
+    --surface-2:    #F3F6F4;
+    --ink:          #0D1A17;
+    --ink-2:        #4C5A55;
+    --muted:        #82918B;
+    --grid:         #E2E7E3;
+    --axis:         #CBD4CF;
+    --hairline:     rgba(13, 26, 23, .11);
+
+    --accent:       #0E7C6B;
+    --accent-soft:  rgba(14, 124, 107, .10);
+
+    /* dados */
+    --series:       #1baf7a;
+    --series-wash:  rgba(27, 175, 122, .14);
+    --good:         #0ca30c;
+    --warn:         #fab219;
+    --crit:         #d03b3b;
+    --good-soft:    rgba(12, 163, 12, .13);
+    --warn-soft:    rgba(250, 178, 25, .18);
+    --crit-soft:    rgba(208, 59, 59, .13);
+    --track:        #E4EAE6;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --plane:       #0A1211;
+      --surface:     #141F1D;
+      --surface-2:   #1A2724;
+      --ink:         #EAF2EF;
+      --ink-2:       #AFC0BA;
+      --muted:       #82918B;
+      --grid:        #233330;
+      --axis:        #2E403C;
+      --hairline:    rgba(234, 242, 239, .12);
+
+      --accent:      #4ED6BA;
+      --accent-soft: rgba(78, 214, 186, .13);
+
+      --series:      #199e70;
+      --series-wash: rgba(25, 158, 112, .18);
+      --good:        #0ca30c;
+      --warn:        #fab219;
+      --crit:        #d03b3b;
+      --good-soft:   rgba(12, 163, 12, .18);
+      --warn-soft:   rgba(250, 178, 25, .16);
+      --crit-soft:   rgba(208, 59, 59, .20);
+      --track:       #22302C;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --plane:       #0A1211;
+    --surface:     #141F1D;
+    --surface-2:   #1A2724;
+    --ink:         #EAF2EF;
+    --ink-2:       #AFC0BA;
+    --muted:       #82918B;
+    --grid:        #233330;
+    --axis:        #2E403C;
+    --hairline:    rgba(234, 242, 239, .12);
+
+    --accent:      #4ED6BA;
+    --accent-soft: rgba(78, 214, 186, .13);
+
+    --series:      #199e70;
+    --series-wash: rgba(25, 158, 112, .18);
+    --good:        #0ca30c;
+    --warn:        #fab219;
+    --crit:        #d03b3b;
+    --good-soft:   rgba(12, 163, 12, .18);
+    --warn-soft:   rgba(250, 178, 25, .16);
+    --crit-soft:   rgba(208, 59, 59, .20);
+    --track:       #22302C;
+  }
+
+  /* ===== base ===== */
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding-inline: 22px;
+    padding-block: 26px 52px;
+    background: var(--plane);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 { margin: 0; text-wrap: balance; font-weight: 600; }
+
+  .shell { max-width: 1280px; margin-inline: auto; display: grid; gap: 18px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+  }
+
+  .eyebrow {
+    margin: 0;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tnum { font-variant-numeric: tabular-nums; }
+
+  /* ===== cabeçalho ===== */
+  .masthead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 28px; }
+  .masthead h1 { font-size: clamp(24px, 3.2vw, 32px); letter-spacing: -.02em; line-height: 1.1; }
+  .masthead .sub { margin: 5px 0 0; color: var(--ink-2); font-size: 14px; max-width: 62ch; }
+  .rule {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 14px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--hairline);
+    font-size: 12.5px; color: var(--ink-2); max-width: 340px;
+  }
+  .rule b { color: var(--ink); font-weight: 600; }
+
+  /* ===== filtro ===== */
+  .filters { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .filters .lab { font-size: 12.5px; color: var(--muted); font-weight: 500; }
+  .seg { display: flex; gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--hairline); border-radius: 11px; flex-wrap: wrap; }
+  .seg button {
+    font: inherit; font-size: 13px; font-weight: 500;
+    padding: 6px 13px; border-radius: 8px; border: 1px solid transparent;
+    background: transparent; color: var(--ink-2); cursor: pointer;
+    display: inline-flex; align-items: center; gap: 7px;
+    transition: background-color .18s, color .18s;
+  }
+  .seg button:hover { background: var(--surface-2); color: var(--ink); }
+  .seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .seg .kdot { width: 8px; height: 8px; border-radius: 2px; background: var(--k); }
+
+  /* ===== KPI ===== */
+  .kpis { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 14px; }
+  .tile { padding: 18px 20px 17px; display: grid; gap: 4px; align-content: start; }
+  .tile .lab { font-size: 12.5px; color: var(--muted); font-weight: 500; }
+  .tile .val { font-size: 34px; font-weight: 600; letter-spacing: -.02em; line-height: 1.05; }
+  .tile .note { font-size: 12.5px; color: var(--ink-2); }
+  .tile.hero .val { font-size: 56px; }
+  .tile.hero { background: var(--surface); }
+
+  .meterline { height: 7px; border-radius: 99px; background: var(--track); overflow: hidden; margin-top: 8px; position: relative; }
+  .meterline i { display: block; height: 100%; background: var(--series); border-radius: 99px; transition: width .6s cubic-bezier(.2,.8,.3,1); }
+
+  /* ===== cabeçalho de cartão ===== */
+  .chead { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 17px 20px 4px; }
+  .chead h2 { font-size: 16.5px; letter-spacing: -.01em; }
+  .chead .sub { margin: 3px 0 0; font-size: 12.5px; color: var(--muted); }
+  .toggle { display: flex; gap: 2px; padding: 3px; border: 1px solid var(--hairline); border-radius: 9px; }
+  .toggle button { font: inherit; font-size: 12px; font-weight: 500; padding: 4px 10px; border: 0; border-radius: 6px; background: transparent; color: var(--ink-2); cursor: pointer; }
+  .toggle button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .toggle button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  /* ===== gráfico de barras horizontais ===== */
+  .bars { --namew: 186px; --valw: 62px; --gap: 12px; position: relative; padding: 14px 20px 8px; }
+  .brow { display: grid; grid-template-columns: var(--namew) minmax(0,1fr) var(--valw); gap: var(--gap); align-items: center; padding: 5px 0; }
+  .brow .nm { font-size: 13.5px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .brow .nm small { display: block; font-size: 11px; color: var(--muted); font-family: "IBM Plex Mono", monospace; }
+  .btrack { position: relative; height: 18px; background: var(--track); border-radius: 3px; }
+  .bfill { position: absolute; inset: 0 auto 0 0; border-radius: 0 4px 4px 0; transition: width .6s cubic-bezier(.2,.8,.3,1); }
+  .bfill[data-band="bom"] { background: var(--good); }
+  .bfill[data-band="atencao"] { background: var(--warn); }
+  .bfill[data-band="critico"] { background: var(--crit); }
+  .brow .vl { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; text-align: right; color: var(--ink); }
+
+  .metaline {
+    position: absolute; top: 40px; bottom: 30px;
+    left: calc(var(--namew) + var(--gap) + (100% - 40px - var(--namew) - var(--valw) - var(--gap) * 2) * 0.8333);
+    width: 1px; background: var(--axis); pointer-events: none;
+  }
+  .metaline span {
+    position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+    font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--muted); white-space: nowrap;
+  }
+  .bars.plain .metaline { display: none; }
+
+  .bfoot { padding: 6px 20px 16px; font-size: 12px; color: var(--muted); }
+
+  /* chips de status: cor NUNCA sozinha — sempre ícone + palavra */
+  .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 2px 8px 2px 6px; border-radius: 99px; white-space: nowrap; }
+  .chip svg { width: 12px; height: 12px; flex: none; }
+  .chip[data-band="bom"] { background: var(--good-soft); color: #0a7a0a; }
+  .chip[data-band="atencao"] { background: var(--warn-soft); color: #8a5e00; }
+  .chip[data-band="critico"] { background: var(--crit-soft); color: #a52c2c; }
+  :root:not([data-theme="light"]) .chip[data-band="bom"],
+  :root[data-theme="dark"] .chip[data-band="bom"] { color: #4fd44f; }
+  :root:not([data-theme="light"]) .chip[data-band="atencao"],
+  :root[data-theme="dark"] .chip[data-band="atencao"] { color: #f0b83c; }
+  :root:not([data-theme="light"]) .chip[data-band="critico"],
+  :root[data-theme="dark"] .chip[data-band="critico"] { color: #ef7a7a; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .chip[data-band="bom"] { color: #4fd44f; }
+    :root:not([data-theme="light"]) .chip[data-band="atencao"] { color: #f0b83c; }
+    :root:not([data-theme="light"]) .chip[data-band="critico"] { color: #ef7a7a; }
+  }
+
+  /* ===== tabela ===== */
+  .tblwrap { overflow-x: auto; padding: 8px 20px 18px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  th { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  td.n, th.n { text-align: right; font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; padding-right: 0; }
+  tbody tr:last-child td { border-bottom: 0; }
+
+  .minibar { display: inline-block; vertical-align: middle; width: 68px; height: 7px; background: var(--track); border-radius: 2px; margin-right: 9px; position: relative; }
+  .minibar i { position: absolute; inset: 0 auto 0 0; background: var(--series); border-radius: 0 3px 3px 0; }
+  .minibar.alert i { background: var(--crit); }
+
+  /* ===== alertas ===== */
+  .alerts { display: grid; }
+  .alert { display: grid; grid-template-columns: 22px minmax(0,1fr); gap: 11px; padding: 13px 20px; border-top: 1px solid var(--grid); }
+  .alert:first-child { border-top: 0; }
+  .alert .ic { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; }
+  .alert .ic svg { width: 14px; height: 14px; }
+  .alert[data-sev="critico"] .ic { background: var(--crit-soft); color: var(--crit); }
+  .alert[data-sev="atencao"] .ic { background: var(--warn-soft); color: #8a5e00; }
+  .alert[data-sev="bom"] .ic { background: var(--good-soft); color: var(--good); }
+  .alert h3 { font-size: 13.5px; font-weight: 600; line-height: 1.35; }
+  .alert p { margin: 2px 0 0; font-size: 12.5px; color: var(--ink-2); line-height: 1.45; }
+  .alert .who { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); margin-top: 3px; display: block; }
+
+  /* ===== linha do tempo (SVG) ===== */
+  .plot { padding: 8px 12px 6px; position: relative; }
+  .plot svg { display: block; width: 100%; max-width: 100%; }
+  .plot text { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; padding: 0 20px 16px; font-size: 12.5px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend i { width: 14px; height: 3px; border-radius: 2px; background: var(--k); }
+
+  /* ===== tooltip ===== */
+  .tip {
+    position: fixed; z-index: 60; pointer-events: none; opacity: 0;
+    transform: translate(-50%, -120%);
+    background: var(--surface); color: var(--ink);
+    border: 1px solid var(--hairline); border-radius: 9px;
+    box-shadow: 0 10px 28px -14px rgba(0,0,0,.45);
+    padding: 9px 12px; font-size: 12.5px; line-height: 1.5;
+    transition: opacity .12s ease; max-width: 260px;
+  }
+  .tip b { font-weight: 600; }
+  .tip .r { display: flex; justify-content: space-between; gap: 16px; color: var(--ink-2); }
+  .tip .r span:last-child { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; color: var(--ink); }
+
+  /* ===== grid de seções ===== */
+  .row2 { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 18px; align-items: start; }
+  .row2b { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 18px; align-items: start; }
+
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  @media (max-width: 1080px) {
+    .kpis { grid-template-columns: 1fr 1fr; }
+    .row2, .row2b { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 620px) {
+    body { padding-inline: 14px; }
+    .kpis { grid-template-columns: 1fr; }
+    .bars { --namew: 116px; --valw: 52px; --gap: 9px; padding-inline: 14px; }
+    .brow .nm { font-size: 12.5px; }
+    .tile.hero .val { font-size: 46px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  }
+</style>
+
+<div class="shell">
+
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">Coordenação de extensão &middot; 2026.1</p>
+      <h1>Engenharia de Computação — acompanhamento curricular</h1>
+      <p class="sub">Quanto cada aluno já cumpriu das horas de extensão obrigatórias, medido contra o semestre em que ele está. Dados fictícios para demonstração.</p>
+    </div>
+    <div class="rule">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;color:var(--accent)">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 14h6"/>
+      </svg>
+      <span>Resolução <b>CNE/CES 7/2018</b>: 10% da carga do curso em extensão &rarr; <b>360 h</b> em 10 semestres, <b>36 h por semestre</b>.</span>
+    </div>
+  </header>
+
+  <div class="filters">
+    <span class="lab">Recorte da turma:</span>
+    <div class="seg" id="seg" role="group" aria-label="Filtrar alunos por situação">
+      <button type="button" data-f="todos" aria-pressed="true">Todos os 14</button>
+      <button type="button" data-f="bom" aria-pressed="false"><span class="kdot" style="--k:var(--good)"></span>Em dia</button>
+      <button type="button" data-f="atencao" aria-pressed="false"><span class="kdot" style="--k:var(--warn)"></span>Atenção</button>
+      <button type="button" data-f="critico" aria-pressed="false"><span class="kdot" style="--k:var(--crit)"></span>Crítico</button>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="card tile hero">
+      <span class="lab">Aderência da turma à meta curricular</span>
+      <span class="val" id="kHero">82%</span>
+      <div class="meterline"><i id="kHeroBar" style="width:82%"></i></div>
+      <span class="note" id="kHeroNote">2.451 h cumpridas de 2.988 h esperadas até aqui</span>
+    </div>
+    <div class="card tile">
+      <span class="lab">Sem tempo hábil de integralizar</span>
+      <span class="val" id="kBlock">2</span>
+      <span class="note" id="kBlockNote">precisariam de mais de 60 h/semestre</span>
+    </div>
+    <div class="card tile">
+      <span class="lab">Em estado crítico</span>
+      <span class="val" id="kCrit">4</span>
+      <span class="note" id="kCritNote">abaixo de 70% da meta do semestre</span>
+    </div>
+    <div class="card tile">
+      <span class="lab">Competência mais escassa</span>
+      <span class="val" id="kSkill">29%</span>
+      <span class="note" id="kSkillNote">da turma desenvolveu Liderança</span>
+    </div>
+  </div>
+
+  <div class="row2">
+    <section class="card">
+      <div class="chead">
+        <div>
+          <h2>Aderência de cada aluno ao seu semestre</h2>
+          <p class="sub">Horas cumpridas &divide; horas esperadas (36 h × semestre). A linha marca 100%.</p>
+        </div>
+        <div class="toggle" role="group" aria-label="Formato de exibição">
+          <button type="button" id="vChart" aria-pressed="true">Gráfico</button>
+          <button type="button" id="vTable" aria-pressed="false">Tabela</button>
+        </div>
+      </div>
+      <div class="bars" id="adBars">
+        <div class="metaline" aria-hidden="true"><span>meta 100%</span></div>
+      </div>
+      <div class="tblwrap" id="adTable" hidden></div>
+      <p class="bfoot">Faixas: em dia &ge; 90% &middot; atenção 70–89% &middot; crítico &lt; 70%.</p>
+    </section>
+
+    <section class="card">
+      <div class="chead">
+        <div>
+          <h2>O que exige ação agora</h2>
+          <p class="sub">Gerado a partir dos dados do recorte selecionado.</p>
+        </div>
+      </div>
+      <div class="alerts" id="alerts"></div>
+    </section>
+  </div>
+
+  <div class="row2b">
+    <section class="card">
+      <div class="chead">
+        <div>
+          <h2>Cobertura de soft skills na turma</h2>
+          <p class="sub">Percentual de alunos que já desenvolveram cada competência.</p>
+        </div>
+      </div>
+      <div class="bars plain" id="skBars"></div>
+      <p class="bfoot" id="skFoot">Uma competência é contabilizada após 2 projetos concluídos que a exercitem.</p>
+    </section>
+
+    <section class="card">
+      <div class="chead">
+        <div>
+          <h2>Onde a defasagem começa</h2>
+          <p class="sub">Média de horas acumuladas por semestre cursado, contra a exigência curricular.</p>
+        </div>
+      </div>
+      <div class="plot" id="gapPlot"></div>
+      <div class="legend">
+        <span><i style="--k:var(--series)"></i>Média da turma</span>
+        <span><i style="--k:var(--axis)"></i>Exigência acumulada (36 h × semestre)</span>
+      </div>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="chead">
+      <div>
+        <h2>Onde a turma evade — por projeto</h2>
+        <p class="sub">Todos os 137 vínculos de alunos nos projetos ativos do semestre. Não afetado pelo filtro acima.</p>
+      </div>
+    </div>
+    <div class="tblwrap" id="projTable"></div>
+  </section>
+
+  <p class="sr" id="live" role="status" aria-live="polite"></p>
+</div>
+
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ============================================================
+     Regra curricular — CNE/CES 7/2018: 10% da carga em extensão.
+     Curso de 3.600 h, 10 semestres => 360 h, 36 h por semestre.
+     ============================================================ */
+  const HORAS_TOTAIS = 360;
+  const SEMESTRES = 10;
+  const POR_SEMESTRE = HORAS_TOTAIS / SEMESTRES;   // 36
+  const TETO_VIAVEL = 60;                          // h/semestre que a coordenação considera exequível
+
+  const SKILLS = [
+    { id: "comunicacao", nome: "Comunicação" },
+    { id: "equipe",      nome: "Trabalho em equipe" },
+    { id: "empatia",     nome: "Empatia" },
+    { id: "tempo",       nome: "Gestão do tempo" },
+    { id: "problemas",   nome: "Resolução de problemas" },
+    { id: "lideranca",   nome: "Liderança" }
+  ];
+
+  const ALUNOS = [
+    { nome: "Ana Beatriz Rocha",      mat: "2021.1.0142", sem: 9, horas: 351, skills: ["comunicacao","equipe","empatia","tempo","problemas","lideranca"] },
+    { nome: "Caio Menezes Lima",      mat: "2021.2.0088", sem: 8, horas: 296, skills: ["comunicacao","equipe","empatia","tempo","problemas","lideranca"] },
+    { nome: "Débora Nascimento Alves",mat: "2022.1.0311", sem: 7, horas: 240, skills: ["comunicacao","equipe","empatia","tempo","problemas"] },
+    { nome: "Isabela Moraes Cunha",   mat: "2021.2.0195", sem: 8, horas: 268, skills: ["comunicacao","equipe","empatia","tempo","problemas","lideranca"] },
+    { nome: "Larissa Ferreira Gomes", mat: "2024.1.0027", sem: 3, horas: 104, skills: ["comunicacao","empatia"] },
+    { nome: "Juliana Costa Barros",   mat: "2023.2.0402", sem: 4, horas: 132, skills: ["comunicacao","equipe","empatia"] },
+    { nome: "Nathália Souza Prado",   mat: "2023.1.0076", sem: 5, horas: 164, skills: ["comunicacao","equipe","empatia","tempo","lideranca"] },
+    { nome: "Camila Duarte Freitas",  mat: "2022.2.0154", sem: 6, horas: 172, skills: ["comunicacao","equipe","empatia","tempo"] },
+    { nome: "Rafael Andrade Pinto",   mat: "2022.2.0233", sem: 6, horas: 158, skills: ["comunicacao","equipe","tempo"] },
+    { nome: "Victor Gonçalves",       mat: "2023.1.0119", sem: 5, horas: 126, skills: ["comunicacao","empatia"] },
+    { nome: "Gustavo Teixeira Lopes", mat: "2023.2.0361", sem: 4, horas: 88,  skills: ["equipe"] },
+    { nome: "Marcos Vinícius Sales",  mat: "2021.1.0207", sem: 9, horas: 196, skills: ["comunicacao","equipe","problemas"] },
+    { nome: "Thiago Barbosa Reis",    mat: "2022.1.0290", sem: 7, horas: 138, skills: ["comunicacao","equipe"] },
+    { nome: "Pedro Henrique Amaral",  mat: "2025.1.0013", sem: 2, horas: 18,  skills: [] }
+  ];
+
+  const PROJETOS = [
+    { nome: "Feira de Ciências Itinerante SENAI",        area: "Divulgação científica", insc: 30, concl: 16, atras: 7, aband: 7 },
+    { nome: "Robótica Educacional na E.M. Rio Vermelho", area: "Educação básica",       insc: 18, concl: 11, atras: 3, aband: 4 },
+    { nome: "Mutirão Digital na Comunidade do Cabula",   area: "Inclusão digital",      insc: 24, concl: 19, atras: 2, aband: 3 },
+    { nome: "Consultoria Jr. para MEIs do Subúrbio",     area: "Empreendedorismo",      insc: 15, concl: 12, atras: 2, aband: 1 },
+    { nome: "Letramento Digital para Idosos — Pituba",   area: "Tecnologia assistiva",  insc: 16, concl: 13, atras: 2, aband: 1 },
+    { nome: "Plantão de Suporte Técnico Solidário",      area: "Tecnologia social",     insc: 12, concl: 10, atras: 1, aband: 1 },
+    { nome: "Horta Urbana Agroecológica do Bairro da Paz", area: "Sustentabilidade",    insc: 22, concl: 20, atras: 1, aband: 1 }
+  ];
+
+  /* ============================================================
+     Derivações — tudo calculado, nada digitado à mão
+     ============================================================ */
+
+  function derivarAluno(a) {
+    const meta = POR_SEMESTRE * a.sem;
+    const aderencia = (a.horas / meta) * 100;
+    const faltam = Math.max(0, HORAS_TOTAIS - a.horas);
+    const restam = SEMESTRES - a.sem;
+    const ritmo = restam > 0 ? faltam / restam : faltam;
+    const banda = aderencia >= 90 ? "bom" : aderencia >= 70 ? "atencao" : "critico";
+    return Object.assign({}, a, {
+      meta: meta, aderencia: aderencia, faltam: faltam,
+      restam: restam, ritmo: ritmo, banda: banda,
+      inviavel: faltam > 0 && (restam === 0 || ritmo > TETO_VIAVEL)
+    });
+  }
+
+  const DADOS = ALUNOS.map(derivarAluno);
+
+  const ROTULO_BANDA = { bom: "Em dia", atencao: "Atenção", critico: "Crítico" };
+
+  // ícone por faixa — o canal secundário obrigatório (cor nunca sozinha)
+  const ICONE = {
+    bom:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+    atencao: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v5"/><path d="M12 17.5v.01"/><path d="M10.3 3.9L2.4 18a1.9 1.9 0 0 0 1.7 2.9h15.8a1.9 1.9 0 0 0 1.7-2.9L13.7 3.9a1.9 1.9 0 0 0-3.4 0z"/></svg>',
+    critico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg>'
+  };
+
+  let filtro = "todos";
+  let vista = "grafico";
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+  const n0 = v => Math.round(v).toLocaleString("pt-BR");
+  const n1 = v => v.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+  function recorte() {
+    return filtro === "todos" ? DADOS : DADOS.filter(a => a.banda === filtro);
+  }
+
+  /* ============================================================
+     Tooltip compartilhado
+     ============================================================ */
+  const tip = $("tip");
+  function mostrarTip(html, x, y) {
+    tip.innerHTML = html;
+    tip.style.left = x + "px";
+    tip.style.top = y + "px";
+    tip.style.opacity = "1";
+  }
+  function esconderTip() { tip.style.opacity = "0"; }
+  document.addEventListener("scroll", esconderTip, true);
+
+  function ligarTip(el, html) {
+    function pos(e) {
+      const r = el.getBoundingClientRect();
+      const x = e && e.clientX ? e.clientX : r.left + r.width / 2;
+      mostrarTip(html, Math.min(Math.max(x, 140), window.innerWidth - 140), r.top);
+    }
+    el.addEventListener("mouseenter", pos);
+    el.addEventListener("mousemove", pos);
+    el.addEventListener("mouseleave", esconderTip);
+    el.addEventListener("focus", pos);
+    el.addEventListener("blur", esconderTip);
+  }
+
+  /* ============================================================
+     KPIs
+     ============================================================ */
+  function renderKpis(set) {
+    const horas = set.reduce((s, a) => s + a.horas, 0);
+    const meta = set.reduce((s, a) => s + a.meta, 0);
+    const pct = meta ? (horas / meta) * 100 : 0;
+    const bloq = set.filter(a => a.inviavel).length;
+    const crit = set.filter(a => a.banda === "critico").length;
+
+    const cob = coberturas(set);
+    const pior = cob.length ? cob[cob.length - 1] : null;
+
+    $("kHero").textContent = Math.round(pct) + "%";
+    $("kHeroBar").style.width = Math.min(100, pct) + "%";
+    $("kHeroNote").textContent = n0(horas) + " h cumpridas de " + n0(meta) + " h esperadas até aqui";
+
+    $("kBlock").textContent = bloq;
+    $("kBlockNote").textContent = bloq
+      ? "precisariam de mais de " + TETO_VIAVEL + " h/semestre"
+      : "todos ainda conseguem integralizar";
+
+    $("kCrit").textContent = crit;
+    $("kCritNote").textContent = crit + " de " + set.length + " abaixo de 70% da meta";
+
+    if (pior) {
+      $("kSkill").textContent = Math.round(pior.pct) + "%";
+      $("kSkillNote").textContent = "da turma desenvolveu " + pior.nome;
+    } else {
+      $("kSkill").textContent = "—";
+      $("kSkillNote").textContent = "sem alunos no recorte";
+    }
+  }
+
+  /* ============================================================
+     Barras: aderência por aluno
+     ============================================================ */
+  const ESCALA_MAX = 120; // a linha de meta cai em 100/120 = 83,33% da pista
+
+  function renderAderencia(set) {
+    const box = $("adBars");
+    const ordenado = set.slice().sort((a, b) => b.aderencia - a.aderencia);
+    box.querySelectorAll(".brow").forEach(n => n.remove());
+
+    if (!ordenado.length) {
+      box.insertAdjacentHTML("beforeend",
+        '<div class="brow"><span class="nm" style="grid-column:1/-1;color:var(--muted)">Nenhum aluno neste recorte.</span></div>');
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    ordenado.forEach(a => {
+      const w = Math.min(100, (a.aderencia / ESCALA_MAX) * 100);
+      const row = document.createElement("div");
+      row.className = "brow";
+      row.innerHTML =
+        '<span class="nm">' + esc(a.nome) + '<small>' + a.sem + 'º sem &middot; ' + esc(a.mat) + '</small></span>' +
+        '<span class="btrack" tabindex="0" role="img" aria-label="' + esc(a.nome) + ': ' + Math.round(a.aderencia) + ' por cento da meta, faixa ' + ROTULO_BANDA[a.banda] + '">' +
+          '<i class="bfill" data-band="' + a.banda + '" style="width:' + w + '%"></i>' +
+        '</span>' +
+        '<span class="vl">' + Math.round(a.aderencia) + '%</span>';
+      frag.appendChild(row);
+
+      const trk = row.querySelector(".btrack");
+      ligarTip(trk,
+        '<b>' + esc(a.nome) + '</b>' +
+        '<div class="r"><span>Horas cumpridas</span><span>' + n0(a.horas) + ' h</span></div>' +
+        '<div class="r"><span>Esperado no ' + a.sem + 'º sem</span><span>' + n0(a.meta) + ' h</span></div>' +
+        '<div class="r"><span>Faltam para as 360 h</span><span>' + n0(a.faltam) + ' h</span></div>' +
+        '<div class="r"><span>Ritmo necessário</span><span>' + (a.restam > 0 ? n1(a.ritmo) + ' h/sem' : 'sem semestres') + '</span></div>');
+    });
+    box.appendChild(frag);
+  }
+
+  function renderTabela(set) {
+    const ordenado = set.slice().sort((a, b) => b.aderencia - a.aderencia);
+    $("adTable").innerHTML =
+      '<table><caption class="sr">Aderência de cada aluno à meta curricular do seu semestre</caption><thead><tr>' +
+      '<th>Aluno</th><th>Matrícula</th><th class="n">Sem.</th><th class="n">Horas</th>' +
+      '<th class="n">Esperado</th><th class="n">Aderência</th><th class="n">Ritmo nec.</th><th>Situação</th>' +
+      '</tr></thead><tbody>' +
+      ordenado.map(a =>
+        '<tr><td>' + esc(a.nome) + '</td><td class="n" style="text-align:left">' + esc(a.mat) + '</td>' +
+        '<td class="n">' + a.sem + 'º</td><td class="n">' + n0(a.horas) + ' h</td>' +
+        '<td class="n">' + n0(a.meta) + ' h</td><td class="n">' + Math.round(a.aderencia) + '%</td>' +
+        '<td class="n">' + (a.restam > 0 ? n1(a.ritmo) + ' h' : '—') + '</td>' +
+        '<td><span class="chip" data-band="' + a.banda + '">' + ICONE[a.banda] + ROTULO_BANDA[a.banda] + '</span></td></tr>'
+      ).join("") + '</tbody></table>';
+  }
+
+  /* ============================================================
+     Barras: cobertura de soft skills
+     ============================================================ */
+  function coberturas(set) {
+    const out = SKILLS.map(s => {
+      const q = set.filter(a => a.skills.indexOf(s.id) >= 0).length;
+      return { id: s.id, nome: s.nome, q: q, pct: set.length ? (q / set.length) * 100 : 0 };
+    });
+    out.sort((a, b) => b.pct - a.pct);
+    return out;
+  }
+
+  function renderSkills(set) {
+    const cob = coberturas(set);
+    const box = $("skBars");
+    box.innerHTML = "";
+    const frag = document.createDocumentFragment();
+    cob.forEach(c => {
+      const row = document.createElement("div");
+      row.className = "brow";
+      row.innerHTML =
+        '<span class="nm">' + esc(c.nome) + '</span>' +
+        '<span class="btrack" tabindex="0" role="img" aria-label="' + esc(c.nome) + ': ' + Math.round(c.pct) + ' por cento da turma">' +
+          '<i class="bfill" style="width:' + c.pct + '%;background:var(--series)"></i>' +
+        '</span>' +
+        '<span class="vl">' + Math.round(c.pct) + '%</span>';
+      frag.appendChild(row);
+      ligarTip(row.querySelector(".btrack"),
+        '<b>' + esc(c.nome) + '</b>' +
+        '<div class="r"><span>Alunos com a competência</span><span>' + c.q + ' de ' + set.length + '</span></div>');
+    });
+    box.appendChild(frag);
+    $("skFoot").textContent = set.length
+      ? "Base: " + set.length + " aluno" + (set.length > 1 ? "s" : "") + " no recorte. Contabilizada após 2 projetos concluídos que a exercitem."
+      : "Nenhum aluno neste recorte.";
+  }
+
+  /* ============================================================
+     Linha: defasagem por semestre
+     ============================================================ */
+  function renderGap(set) {
+    const box = $("gapPlot");
+    const W = Math.max(320, box.clientWidth - 24);
+    const H = 268;
+    const P = { t: 22, r: 86, b: 34, l: 46 };
+
+    const porSem = {};
+    set.forEach(a => { (porSem[a.sem] = porSem[a.sem] || []).push(a.horas); });
+    const sems = Object.keys(porSem).map(Number).sort((a, b) => a - b);
+
+    if (sems.length < 2) {
+      box.innerHTML = '<p style="padding:34px 8px 40px;color:var(--muted);font-size:13px;margin:0">' +
+        (sems.length ? 'Só um semestre no recorte — a curva precisa de pelo menos dois pontos.' : 'Nenhum aluno neste recorte.') + '</p>';
+      return;
+    }
+
+    const pts = sems.map(s => ({
+      sem: s,
+      media: porSem[s].reduce((x, y) => x + y, 0) / porSem[s].length,
+      meta: POR_SEMESTRE * s,
+      qtd: porSem[s].length
+    }));
+
+    const yMax = 400;
+    const x0 = sems[0], x1 = sems[sems.length - 1];
+    const X = s => P.l + ((s - x0) / Math.max(1, x1 - x0)) * (W - P.l - P.r);
+    const Y = v => P.t + (1 - v / yMax) * (H - P.t - P.b);
+
+    const ticks = [0, 100, 200, 300, 400];
+    let svg = '<svg width="' + W + '" height="' + H + '" role="img" aria-label="Média de horas acumuladas por semestre contra a exigência curricular">';
+
+    // grade + eixo y
+    ticks.forEach(t => {
+      svg += '<line x1="' + P.l + '" y1="' + Y(t) + '" x2="' + (W - P.r) + '" y2="' + Y(t) + '" stroke="var(--grid)" stroke-width="1"/>';
+      svg += '<text x="' + (P.l - 9) + '" y="' + (Y(t) + 4) + '" text-anchor="end" font-size="11" fill="var(--muted)" style="font-variant-numeric:tabular-nums">' + t + '</text>';
+    });
+    svg += '<text x="' + P.l + '" y="' + (P.t - 8) + '" font-size="10.5" fill="var(--muted)" letter-spacing=".08em">HORAS ACUMULADAS</text>';
+
+    // eixo x
+    pts.forEach(p => {
+      svg += '<text x="' + X(p.sem) + '" y="' + (H - P.b + 18) + '" text-anchor="middle" font-size="11.5" fill="var(--muted)">' + p.sem + 'º</text>';
+    });
+
+    // linha de exigência (referência, recessiva)
+    svg += '<path d="' + pts.map((p, i) => (i ? 'L' : 'M') + X(p.sem) + ' ' + Y(p.meta)).join(' ') +
+      '" fill="none" stroke="var(--axis)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>';
+
+    // área + linha da turma
+    const last = pts[pts.length - 1];
+    svg += '<path d="' + pts.map((p, i) => (i ? 'L' : 'M') + X(p.sem) + ' ' + Y(p.media)).join(' ') +
+      ' L' + X(last.sem) + ' ' + Y(0) + ' L' + X(pts[0].sem) + ' ' + Y(0) + ' Z" fill="var(--series-wash)"/>';
+    svg += '<path d="' + pts.map((p, i) => (i ? 'L' : 'M') + X(p.sem) + ' ' + Y(p.media)).join(' ') +
+      '" fill="none" stroke="var(--series)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+
+    // marcadores com anel de superfície
+    pts.forEach(p => {
+      svg += '<circle cx="' + X(p.sem) + '" cy="' + Y(p.media) + '" r="4.5" fill="var(--series)" stroke="var(--surface)" stroke-width="2"/>';
+    });
+
+    // rótulos diretos apenas nas pontas
+    svg += '<text x="' + (X(last.sem) + 10) + '" y="' + (Y(last.media) + 4) + '" font-size="12" font-weight="600" fill="var(--ink)">' + n0(last.media) + ' h</text>';
+    svg += '<text x="' + (X(last.sem) + 10) + '" y="' + (Y(last.meta) + 4) + '" font-size="11.5" fill="var(--muted)">' + n0(last.meta) + ' h exig.</text>';
+
+    // alvos de hover generosos
+    pts.forEach(p => {
+      svg += '<rect class="hit" data-sem="' + p.sem + '" x="' + (X(p.sem) - 22) + '" y="' + P.t + '" width="44" height="' + (H - P.t - P.b) + '" fill="transparent" tabindex="0" role="img" aria-label="' + p.sem + 'º semestre: média ' + n0(p.media) + ' horas, exigido ' + n0(p.meta) + ' horas"/>';
+    });
+
+    svg += '</svg>';
+    box.innerHTML = svg;
+
+    box.querySelectorAll(".hit").forEach(h => {
+      const p = pts.filter(q => q.sem === Number(h.dataset.sem))[0];
+      const def = p.meta - p.media;
+      ligarTip(h,
+        '<b>' + p.sem + 'º semestre</b>' +
+        '<div class="r"><span>Média da turma</span><span>' + n0(p.media) + ' h</span></div>' +
+        '<div class="r"><span>Exigido até aqui</span><span>' + n0(p.meta) + ' h</span></div>' +
+        '<div class="r"><span>Defasagem</span><span>' + (def > 0 ? '−' + n0(def) + ' h' : '+' + n0(-def) + ' h') + '</span></div>' +
+        '<div class="r"><span>Alunos</span><span>' + p.qtd + '</span></div>');
+    });
+  }
+
+  /* ============================================================
+     Alertas — derivados, não digitados
+     ============================================================ */
+  function renderAlertas(set) {
+    const A = [];
+
+    set.filter(a => a.inviavel)
+       .sort((a, b) => b.ritmo - a.ritmo)
+       .forEach(a => {
+         A.push({
+           sev: "critico",
+           t: a.restam === 0
+              ? "Não integraliza: faltam " + n0(a.faltam) + " h e não há semestre restante"
+              : "Ritmo inviável: precisaria de " + n1(a.ritmo) + " h por semestre",
+           p: a.restam === 0
+              ? "Acionar plano emergencial de integralização ou prorrogar a colação."
+              : "Acima do teto de " + TETO_VIAVEL + " h/semestre. Realocar em projeto de carga concentrada.",
+           who: a.nome + " · " + a.sem + "º sem · " + n0(a.horas) + " h de 360 h"
+         });
+       });
+
+    const piores = set.filter(a => a.banda === "critico" && !a.inviavel)
+                      .sort((a, b) => a.aderencia - b.aderencia).slice(0, 2);
+    piores.forEach(a => {
+      A.push({
+        sev: "atencao",
+        t: "Aderência de " + Math.round(a.aderencia) + "% no " + a.sem + "º semestre",
+        p: "Ainda dá tempo: " + n1(a.ritmo) + " h/semestre resolvem. Convocar para orientação de matrícula em extensão.",
+        who: a.nome + " · " + n0(a.horas) + " h de " + n0(a.meta) + " h esperadas"
+      });
+    });
+
+    const cob = coberturas(set);
+    if (cob.length) {
+      const pior = cob[cob.length - 1];
+      if (pior.pct < 50) {
+        A.push({
+          sev: "atencao",
+          t: pior.nome + " em " + Math.round(pior.pct) + "% da turma",
+          p: "Competência mais escassa do recorte. Abrir vagas de coordenação discente nos projetos existentes.",
+          who: pior.q + " de " + set.length + " alunos"
+        });
+      }
+    }
+
+    const evasao = PROJETOS.map(p => Object.assign({}, p, { ev: (p.atras + p.aband) / p.insc * 100 }))
+                           .sort((a, b) => b.ev - a.ev)[0];
+    if (evasao.ev >= 35) {
+      A.push({
+        sev: "atencao",
+        t: "Evasão de " + Math.round(evasao.ev) + "% em um único projeto",
+        p: "O problema está no projeto, não nos alunos. Revisar carga horária e mentoria antes da próxima oferta.",
+        who: evasao.nome
+      });
+    }
+
+    const destaque = set.slice().sort((a, b) => b.aderencia - a.aderencia)[0];
+    if (destaque && destaque.aderencia >= 100) {
+      A.push({
+        sev: "bom",
+        t: "Já cumpriu " + Math.round(destaque.aderencia) + "% do exigido para o semestre",
+        p: "Perfil elegível para mentoria de calouros e coordenação discente de projeto.",
+        who: destaque.nome + " · " + n0(destaque.horas) + " h de 360 h"
+      });
+    }
+
+    $("alerts").innerHTML = A.length
+      ? A.map(a =>
+          '<article class="alert" data-sev="' + a.sev + '">' +
+            '<span class="ic">' + ICONE[a.sev] + '</span>' +
+            '<div><h3>' + esc(a.t) + '</h3><p>' + esc(a.p) + '</p><span class="who">' + esc(a.who) + '</span></div>' +
+          '</article>').join("")
+      : '<p style="padding:18px 20px;color:var(--muted);font-size:13px;margin:0">Nada exige ação neste recorte.</p>';
+  }
+
+  /* ============================================================
+     Tabela de projetos
+     ============================================================ */
+  function renderProjetos() {
+    const linhas = PROJETOS.map(p => Object.assign({}, p, {
+      ev: (p.atras + p.aband) / p.insc * 100,
+      tx: p.concl / p.insc * 100
+    })).sort((a, b) => b.ev - a.ev);
+    const maxEv = Math.max.apply(null, linhas.map(l => l.ev));
+
+    $("projTable").innerHTML =
+      '<table><caption class="sr">Evasão por projeto de extensão</caption><thead><tr>' +
+      '<th>Projeto</th><th>Área</th><th class="n">Inscritos</th><th class="n">Concluíram</th>' +
+      '<th class="n">Atrasados</th><th class="n">Abandonos</th><th style="min-width:180px">Evasão</th>' +
+      '</tr></thead><tbody>' +
+      linhas.map(l =>
+        '<tr><td>' + esc(l.nome) + '</td><td style="color:var(--ink-2)">' + esc(l.area) + '</td>' +
+        '<td class="n">' + l.insc + '</td><td class="n">' + l.concl + '</td>' +
+        '<td class="n">' + l.atras + '</td><td class="n">' + l.aband + '</td>' +
+        '<td><span class="minibar' + (l.ev >= 35 ? ' alert' : '') + '"><i style="width:' + (l.ev / maxEv * 100) + '%"></i></span>' +
+        '<span style="font-family:\'IBM Plex Mono\',monospace;font-variant-numeric:tabular-nums;font-weight:600">' + Math.round(l.ev) + '%</span></td></tr>'
+      ).join("") + '</tbody></table>';
+  }
+
+  /* ============================================================
+     Orquestração
+     ============================================================ */
+  function render() {
+    const set = recorte();
+    renderKpis(set);
+    renderAderencia(set);
+    renderTabela(set);
+    renderSkills(set);
+    renderGap(set);
+    renderAlertas(set);
+    $("live").textContent = "Recorte: " + set.length + " alunos.";
+  }
+
+  $("seg").addEventListener("click", function (e) {
+    const b = e.target.closest("button[data-f]");
+    if (!b) return;
+    filtro = b.dataset.f;
+    $("seg").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    esconderTip();
+    render();
+  });
+
+  function setVista(v) {
+    vista = v;
+    const g = v === "grafico";
+    $("adBars").hidden = !g;
+    $("adTable").hidden = g;
+    $("vChart").setAttribute("aria-pressed", String(g));
+    $("vTable").setAttribute("aria-pressed", String(!g));
+    esconderTip();
+  }
+  $("vChart").addEventListener("click", () => setVista("grafico"));
+  $("vTable").addEventListener("click", () => setVista("tabela"));
+
+  let raf = null;
+  new ResizeObserver(() => {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => renderGap(recorte()));
+  }).observe($("gapPlot"));
+
+  renderProjetos();
+  render();
+})();
+</script>

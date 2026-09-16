@@ -1,0 +1,1135 @@
+<title>Árvore de Extensão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+
+<style>
+  /* ---------- tokens: tema claro completo em :root ---------- */
+  :root {
+    --ink:            #14231B;
+    --ink-soft:       #3B4C42;
+    --muted:          #6E7C72;
+    --hairline:       rgba(20, 35, 27, .12);
+    --hairline-2:     rgba(20, 35, 27, .07);
+
+    --bg:             #EFF3EC;
+    --bg-wash-1:      rgba(127, 174, 85, .28);
+    --bg-wash-2:      rgba(47, 107, 79, .16);
+    --bg-wash-3:      rgba(201, 138, 40, .12);
+
+    --glass:          rgba(255, 255, 255, .62);
+    --glass-strong:   rgba(255, 255, 255, .80);
+    --glass-edge:     rgba(255, 255, 255, .75);
+    --shadow:         0 18px 40px -26px rgba(20, 45, 30, .55);
+    --shadow-lift:    0 30px 70px -34px rgba(20, 45, 30, .70);
+
+    --accent:         #2F6B4F;
+    --accent-bright:  #7FAE55;
+    --accent-ghost:   rgba(47, 107, 79, .10);
+
+    --good:           #3E8E5A;
+    --warn:           #C98A28;
+    --crit:           #B4553B;
+    --idle:           #7B8A80;
+
+    --chip-good:      rgba(62, 142, 90, .14);
+    --chip-warn:      rgba(201, 138, 40, .16);
+    --chip-crit:      rgba(180, 85, 59, .15);
+    --chip-idle:      rgba(123, 138, 128, .16);
+
+    /* paleta do canvas */
+    --sky-top:        #E7EEE2;
+    --sky-bot:        #F4F7F0;
+    --bark-live:      #4C3A2B;
+    --bark-dead:      #6F6A62;
+    --leaf-live:      #6FA347;
+    --leaf-deep:      #2F6B4F;
+    --leaf-dead:      #A8794A;
+    --leaf-ash:       #8D8B80;
+    --soil:           #C9CFBE;
+    --halo:           rgba(146, 196, 96, .40);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink:            #E7EFE6;
+      --ink-soft:       #BCCBBF;
+      --muted:          #8C9B90;
+      --hairline:       rgba(212, 233, 216, .14);
+      --hairline-2:     rgba(212, 233, 216, .08);
+
+      --bg:             #0E1713;
+      --bg-wash-1:      rgba(111, 163, 71, .20);
+      --bg-wash-2:      rgba(47, 107, 79, .26);
+      --bg-wash-3:      rgba(201, 138, 40, .10);
+
+      --glass:          rgba(30, 46, 38, .60);
+      --glass-strong:   rgba(33, 51, 42, .82);
+      --glass-edge:     rgba(160, 200, 170, .14);
+      --shadow:         0 18px 40px -26px rgba(0, 0, 0, .80);
+      --shadow-lift:    0 30px 70px -32px rgba(0, 0, 0, .90);
+
+      --accent:         #79B98C;
+      --accent-bright:  #9ED06A;
+      --accent-ghost:   rgba(121, 185, 140, .14);
+
+      --good:           #6FBF8A;
+      --warn:           #E0A94A;
+      --crit:           #DC7C5E;
+      --idle:           #8B9A90;
+
+      --chip-good:      rgba(111, 191, 138, .16);
+      --chip-warn:      rgba(224, 169, 74, .16);
+      --chip-crit:      rgba(220, 124, 94, .16);
+      --chip-idle:      rgba(139, 154, 144, .16);
+
+      --sky-top:        #142019;
+      --sky-bot:        #0D1611;
+      --bark-live:      #6A5140;
+      --bark-dead:      #5A564F;
+      --leaf-live:      #79B14F;
+      --leaf-deep:      #3C7F5C;
+      --leaf-dead:      #8A6238;
+      --leaf-ash:       #6D6C64;
+      --soil:           #26332A;
+      --halo:           rgba(120, 180, 90, .28);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ink:            #E7EFE6;
+    --ink-soft:       #BCCBBF;
+    --muted:          #8C9B90;
+    --hairline:       rgba(212, 233, 216, .14);
+    --hairline-2:     rgba(212, 233, 216, .08);
+
+    --bg:             #0E1713;
+    --bg-wash-1:      rgba(111, 163, 71, .20);
+    --bg-wash-2:      rgba(47, 107, 79, .26);
+    --bg-wash-3:      rgba(201, 138, 40, .10);
+
+    --glass:          rgba(30, 46, 38, .60);
+    --glass-strong:   rgba(33, 51, 42, .82);
+    --glass-edge:     rgba(160, 200, 170, .14);
+    --shadow:         0 18px 40px -26px rgba(0, 0, 0, .80);
+    --shadow-lift:    0 30px 70px -32px rgba(0, 0, 0, .90);
+
+    --accent:         #79B98C;
+    --accent-bright:  #9ED06A;
+    --accent-ghost:   rgba(121, 185, 140, .14);
+
+    --good:           #6FBF8A;
+    --warn:           #E0A94A;
+    --crit:           #DC7C5E;
+    --idle:           #8B9A90;
+
+    --chip-good:      rgba(111, 191, 138, .16);
+    --chip-warn:      rgba(224, 169, 74, .16);
+    --chip-crit:      rgba(220, 124, 94, .16);
+    --chip-idle:      rgba(139, 154, 144, .16);
+
+    --sky-top:        #142019;
+    --sky-bot:        #0D1611;
+    --bark-live:      #6A5140;
+    --bark-dead:      #5A564F;
+    --leaf-live:      #79B14F;
+    --leaf-deep:      #3C7F5C;
+    --leaf-dead:      #8A6238;
+    --leaf-ash:       #6D6C64;
+    --soil:           #26332A;
+    --halo:           rgba(120, 180, 90, .28);
+  }
+
+  /* ---------- base ---------- */
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding-inline: 20px;
+    padding-block: 28px 56px;
+    background: var(--bg);
+    background-image:
+      radial-gradient(900px 620px at 12% -6%,  var(--bg-wash-1), transparent 62%),
+      radial-gradient(760px 560px at 92% 8%,   var(--bg-wash-2), transparent 60%),
+      radial-gradient(680px 520px at 60% 108%, var(--bg-wash-3), transparent 64%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: "Karla", "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 { margin: 0; text-wrap: balance; font-family: "Fraunces", Georgia, serif; font-weight: 600; }
+
+  .shell { max-width: 1180px; margin-inline: auto; display: grid; gap: 22px; }
+
+  .panel {
+    background: var(--glass);
+    border: 1px solid var(--glass-edge);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    backdrop-filter: blur(16px) saturate(1.3);
+  }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .num { font-family: "JetBrains Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+  /* ---------- cabeçalho ---------- */
+  .masthead {
+    display: flex; flex-wrap: wrap; align-items: flex-end;
+    justify-content: space-between; gap: 18px 26px;
+    padding-block: 2px 4px;
+  }
+  .masthead h1 {
+    font-size: clamp(28px, 4.4vw, 40px);
+    line-height: 1.04;
+    letter-spacing: -.015em;
+    font-variation-settings: "SOFT" 40, "WONK" 1;
+  }
+  .masthead p.lede { margin: 6px 0 0; color: var(--ink-soft); max-width: 52ch; font-size: 14.5px; }
+
+  .student {
+    display: flex; align-items: center; gap: 12px;
+    padding: 9px 9px 9px 14px;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    background: var(--glass-strong);
+  }
+  .student .who { display: grid; line-height: 1.25; }
+  .student .who b { font-size: 14px; font-weight: 600; }
+  .student .who span { font-size: 11.5px; color: var(--muted); }
+  .avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--accent); color: #fff;
+    font-family: "Fraunces", serif; font-size: 16px; font-weight: 600;
+  }
+
+  /* ---------- copa: árvore + trilha de estado ---------- */
+  .canopy { display: grid; grid-template-columns: minmax(0, 1fr) 286px; overflow: hidden; box-shadow: var(--shadow-lift); }
+
+  .stage { position: relative; min-height: 430px; }
+  .stage canvas { display: block; width: 100%; height: 100%; max-width: 100%; }
+  .stage-tag { position: absolute; left: 20px; top: 18px; display: flex; align-items: center; gap: 8px; }
+  .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-bright); box-shadow: 0 0 0 4px var(--accent-ghost); }
+
+  .stage-caption { position: absolute; left: 20px; right: 20px; bottom: 16px; margin: 0; font-size: 12.5px; color: var(--muted); }
+
+  .rail {
+    border-left: 1px solid var(--hairline);
+    padding: 22px 22px 24px;
+    display: grid; align-content: start; gap: 20px;
+    background: var(--glass-strong);
+  }
+
+  .stage-name {
+    font-family: "Fraunces", serif; font-weight: 700;
+    font-size: clamp(24px, 2.4vw, 30px); line-height: 1.06;
+    letter-spacing: -.01em; margin: 4px 0 0;
+    font-variation-settings: "SOFT" 60, "WONK" 1;
+  }
+  .stage-rank { font-size: 12.5px; color: var(--muted); margin: 2px 0 0; }
+
+  .meter { display: grid; gap: 7px; }
+  .meter-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .meter-head .val { font-size: 13px; font-weight: 600; }
+  .track { position: relative; height: 8px; border-radius: 99px; background: var(--accent-ghost); overflow: hidden; }
+  .fill { height: 100%; border-radius: 99px; transition: width .8s cubic-bezier(.22,.8,.3,1), background-color .7s ease; }
+  .fill.xp { background: linear-gradient(90deg, var(--accent), var(--accent-bright)); }
+  .tick { position: absolute; top: -1px; bottom: -1px; width: 1px; background: var(--hairline); }
+  .meter-foot { font-size: 11.5px; color: var(--muted); margin: 0; }
+
+  .tally { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--hairline-2); border: 1px solid var(--hairline-2); border-radius: 12px; overflow: hidden; }
+  .tally div { background: var(--glass-strong); padding: 11px 10px; display: grid; gap: 2px; }
+  .tally b { font-family: "JetBrains Mono", monospace; font-variant-numeric: tabular-nums; font-size: 19px; font-weight: 600; line-height: 1; }
+  .tally span { font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .tally .t-good b { color: var(--good); }
+  .tally .t-warn b { color: var(--warn); }
+  .tally .t-crit b { color: var(--crit); }
+
+  /* ---------- parte inferior ---------- */
+  .lower { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 22px; align-items: start; }
+  .col { display: grid; gap: 22px; min-width: 0; }
+
+  .panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 18px 22px 14px; }
+  .panel-head h2 { font-size: 19px; letter-spacing: -.01em; }
+  .panel-head .hint { font-size: 12px; color: var(--muted); }
+
+  /* ---------- ledger de projetos ---------- */
+  .ledger { display: grid; }
+  .row {
+    display: grid; gap: 12px;
+    padding: 16px 22px 18px 18px;
+    border-top: 1px solid var(--hairline-2);
+    border-left: 3px solid var(--st);
+    transition: background-color .3s ease, border-color .5s ease;
+  }
+  .row[data-status="concluido"]  { --st: var(--good); }
+  .row[data-status="ativo"]      { --st: var(--accent); }
+  .row[data-status="atrasado"]   { --st: var(--warn); }
+  .row[data-status="abandonado"] { --st: var(--idle); }
+  .row[data-status="abandonado"] .r-title { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+  .row:hover { background: var(--accent-ghost); }
+
+  .r-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .r-title { font-size: 15.5px; font-weight: 600; line-height: 1.3; margin: 0 0 3px; font-family: "Karla", sans-serif; }
+  .r-meta { margin: 0; font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; }
+  .r-meta .sep { opacity: .45; }
+
+  .chip {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+    padding: 5px 9px; border-radius: 7px; white-space: nowrap; font-weight: 600;
+  }
+  .chip[data-status="concluido"]  { background: var(--chip-good); color: var(--good); }
+  .chip[data-status="ativo"]      { background: var(--accent-ghost); color: var(--accent); }
+  .chip[data-status="atrasado"]   { background: var(--chip-warn); color: var(--warn); }
+  .chip[data-status="abandonado"] { background: var(--chip-idle); color: var(--idle); }
+
+  .r-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; color: var(--ink-soft);
+    border: 1px solid var(--hairline); border-radius: 99px;
+    padding: 2px 10px 2px 7px; background: transparent;
+  }
+  .tag .o { width: 7px; height: 7px; border-radius: 50%; background: var(--o); opacity: .35; }
+  .tag.won { border-color: transparent; background: var(--chip-good); color: var(--good); font-weight: 600; }
+  .tag.won .o { opacity: 1; box-shadow: 0 0 7px 1px var(--o); }
+
+  .r-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  button {
+    font: inherit; cursor: pointer;
+    border-radius: 9px; padding: 7px 13px;
+    border: 1px solid var(--hairline);
+    background: var(--glass-strong); color: var(--ink-soft);
+    font-size: 12.5px; font-weight: 600;
+    transition: transform .14s ease, background-color .2s ease, border-color .2s ease, color .2s ease;
+  }
+  button:hover { transform: translateY(-1px); border-color: var(--accent); color: var(--accent); }
+  button:active { transform: translateY(0) scale(.98); }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.primary:hover { color: #fff; filter: brightness(1.08); }
+  button.warn:hover  { border-color: var(--warn); color: var(--warn); }
+  button.danger:hover { border-color: var(--crit); color: var(--crit); }
+
+  .ledger-foot { padding: 14px 22px 18px; border-top: 1px solid var(--hairline-2); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .ledger-foot .note { font-size: 12px; color: var(--muted); }
+
+  /* ---------- bosque de soft skills ---------- */
+  .grove { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--hairline-2); border-top: 1px solid var(--hairline-2); }
+  .skill { background: var(--glass-strong); padding: 15px 15px 14px; display: grid; gap: 9px; align-content: start; transition: background-color .4s ease; }
+  .skill .ico { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; background: var(--chip-idle); color: var(--muted); transition: background-color .5s ease, color .5s ease, box-shadow .5s ease; }
+  .skill .ico svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .skill b { font-size: 13.5px; font-weight: 600; line-height: 1.25; color: var(--muted); transition: color .5s ease; }
+  .skill .prog { display: flex; align-items: center; gap: 8px; }
+  .skill .prog .track { flex: 1; height: 5px; }
+  .skill .prog .n { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .skill .fill { background: var(--idle); }
+
+  .skill.unlocked { background: color-mix(in srgb, var(--accent-ghost) 60%, var(--glass-strong)); }
+  .skill.unlocked .ico { background: color-mix(in srgb, var(--o) 20%, transparent); color: var(--o); box-shadow: 0 0 0 1px color-mix(in srgb, var(--o) 38%, transparent); }
+  .skill.unlocked b { color: var(--ink); }
+  .skill.unlocked .fill { background: var(--o); }
+  .skill.unlocked .n { color: var(--ink-soft); }
+
+  @keyframes bloom {
+    0%   { transform: scale(.82) rotate(-8deg); opacity: .4; }
+    55%  { transform: scale(1.14) rotate(4deg); }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  @keyframes ring {
+    from { box-shadow: 0 0 0 0 var(--o); }
+    to   { box-shadow: 0 0 0 16px transparent; }
+  }
+  .skill.bloom .ico { animation: bloom .75s cubic-bezier(.2,.9,.3,1.2) both, ring .9s ease-out .1s both; }
+
+  /* ---------- registro ---------- */
+  .log { display: grid; max-height: 250px; overflow-y: auto; }
+  .log-item {
+    display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 12px;
+    padding: 10px 22px; border-top: 1px solid var(--hairline-2);
+    font-size: 13px; color: var(--ink-soft);
+  }
+  .log-item time { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--muted); padding-top: 2px; }
+  .log-item .d { color: var(--k); font-weight: 700; }
+  .log-empty { padding: 16px 22px 20px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--hairline-2); margin: 0; }
+
+  /* ---------- avisos ---------- */
+  .toasts {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    display: grid; gap: 8px; z-index: 40; width: min(420px, calc(100vw - 32px));
+  }
+  .toast {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 15px; border-radius: 13px;
+    background: var(--glass-strong); border: 1px solid var(--glass-edge);
+    box-shadow: var(--shadow-lift);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+    font-size: 13.5px; color: var(--ink);
+    animation: rise .4s cubic-bezier(.2,.9,.3,1.1) both;
+  }
+  .toast .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--k); flex: none; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ---------- responsivo ---------- */
+  @media (max-width: 980px) { .lower { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 760px) {
+    .canopy { grid-template-columns: minmax(0, 1fr); }
+    .rail { border-left: none; border-top: 1px solid var(--hairline); }
+    .stage { min-height: 340px; }
+    body { padding-inline: 16px; }
+    .r-top { flex-direction: column; }
+  }
+  @media (max-width: 400px) { .grove { grid-template-columns: minmax(0, 1fr); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+</style>
+
+<div class="shell">
+
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">Extensão universitária &middot; Soft skills</p>
+      <h1>Árvore de Extensão</h1>
+      <p class="lede">Cada projeto concluído faz a árvore crescer de verdade. Atrasos e abandonos secam a copa — e as competências travam de novo.</p>
+    </div>
+    <div class="student">
+      <div class="avatar" aria-hidden="true">VG</div>
+      <div class="who">
+        <b>Victor Gonçalves</b>
+        <span>Eng. de Computação &middot; 5º semestre</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="panel canopy">
+    <div class="stage">
+      <div class="stage-tag">
+        <span class="pulse" aria-hidden="true"></span>
+        <p class="eyebrow">Estado atual da árvore</p>
+      </div>
+      <canvas id="tree" aria-hidden="true"></canvas>
+      <p class="stage-caption" id="caption">Copa densa e verde: as entregas estão em dia.</p>
+      <p class="sr" id="treeSummary" role="status" aria-live="polite"></p>
+    </div>
+
+    <aside class="rail">
+      <div>
+        <p class="eyebrow">Nível</p>
+        <p class="stage-name" id="levelName">Muda</p>
+        <p class="stage-rank" id="levelRank">Nível 3 de 6</p>
+      </div>
+
+      <div class="meter">
+        <div class="meter-head">
+          <span class="eyebrow">Experiência</span>
+          <span class="val num" id="xpVal">320 XP</span>
+        </div>
+        <div class="track" id="xpTrack"><div class="fill xp" id="xpFill" style="width:30%"></div></div>
+        <p class="meter-foot" id="xpFoot">130 XP para virar Árvore jovem</p>
+      </div>
+
+      <div class="meter">
+        <div class="meter-head">
+          <span class="eyebrow">Vitalidade</span>
+          <span class="val num" id="vitVal">80%</span>
+        </div>
+        <div class="track"><div class="fill" id="vitFill" style="width:80%"></div></div>
+        <p class="meter-foot" id="vitFoot">1 atraso drenando a copa</p>
+      </div>
+
+      <div class="tally">
+        <div class="t-good"><b class="num" id="nDone">2</b><span>Concluídos</span></div>
+        <div class="t-warn"><b class="num" id="nLate">1</b><span>Atrasados</span></div>
+        <div class="t-crit"><b class="num" id="nDrop">0</b><span>Abandonos</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <div class="lower">
+    <div class="col">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Projetos de extensão</h2>
+          <span class="hint">Use as ações para simular o semestre</span>
+        </div>
+        <div class="ledger" id="ledger"></div>
+        <div class="ledger-foot">
+          <span class="note" id="hoursNote">64 h de 210 h registradas</span>
+          <button type="button" id="reset">Reiniciar simulação</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Soft skills</h2>
+          <span class="hint num" id="skillCount">1 / 6 &middot; viram frutos na copa</span>
+        </div>
+        <div class="grove" id="grove"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Registro</h2>
+          <span class="hint">Últimas movimentações</span>
+        </div>
+        <div class="log" id="log"></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* =========================================================
+     Dados simulados — um semestre plausível de extensão
+     ========================================================= */
+
+  const SKILLS = [
+    { id: "comunicacao", nome: "Comunicação",            req: 2, cor: "#5BC8F5", icon: "M21 12a8 8 0 0 1-8 8H7l-4 3v-6.7A8 8 0 0 1 11 4h2a8 8 0 0 1 8 8z" },
+    { id: "lideranca",   nome: "Liderança",              req: 2, cor: "#F3C16B", icon: "M12 3.2l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 8.9l5.4-.8z" },
+    { id: "equipe",      nome: "Trabalho em equipe",     req: 2, cor: "#8CC96A", icon: "M9 11a2.6 2.6 0 1 0 0-5.2A2.6 2.6 0 0 0 9 11zM16.4 11.6a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4zM3.5 19c0-3 2.5-4.7 5.5-4.7s5.5 1.7 5.5 4.7M16 14.6c2.6.2 4.5 1.7 4.5 4.4" },
+    { id: "problemas",   nome: "Resolução de problemas", req: 2, cor: "#C78BF0", icon: "M9.5 18.2h5M10.5 21h3M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 1.9h5c.1-.7.5-1.4 1.1-1.9A6 6 0 0 0 12 3z" },
+    { id: "empatia",     nome: "Empatia",                req: 2, cor: "#FF8F9E", icon: "M12 20.3s-7.2-4.4-7.2-9.3a4.1 4.1 0 0 1 7.2-2.7 4.1 4.1 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z" },
+    { id: "tempo",       nome: "Gestão do tempo",        req: 2, cor: "#4ED6BA", icon: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7.2V12l3.2 2" }
+  ];
+
+  const PROJETOS = [
+    { id: "p1", titulo: "Mutirão Digital na Comunidade do Cabula",     area: "Inclusão digital",      horas: 40, prazo: "12 abr", status: "concluido", skills: ["comunicacao", "empatia"] },
+    { id: "p2", titulo: "Robótica Educacional na E.M. Rio Vermelho",   area: "Educação básica",       horas: 60, prazo: "30 mai", status: "ativo",     skills: ["lideranca", "equipe", "problemas"] },
+    { id: "p3", titulo: "Consultoria Jr. para MEIs do Subúrbio",       area: "Empreendedorismo",      horas: 30, prazo: "18 mai", status: "ativo",     skills: ["comunicacao", "problemas", "tempo"] },
+    { id: "p4", titulo: "Horta Urbana Agroecológica do Bairro da Paz", area: "Sustentabilidade",      horas: 24, prazo: "05 abr", status: "concluido", skills: ["equipe", "empatia"] },
+    { id: "p5", titulo: "Feira de Ciências Itinerante SENAI",          area: "Divulgação científica", horas: 36, prazo: "22 abr", status: "atrasado",  skills: ["lideranca", "comunicacao"] },
+    { id: "p6", titulo: "Plantão de Suporte Técnico Solidário",        area: "Tecnologia social",     horas: 20, prazo: "14 jun", status: "ativo",     skills: ["problemas", "tempo"] }
+  ];
+
+  const NIVEIS = [
+    { min: 0,   nome: "Semente" },
+    { min: 120, nome: "Broto" },
+    { min: 280, nome: "Muda" },
+    { min: 450, nome: "Árvore jovem" },
+    { min: 700, nome: "Copa firme" },
+    { min: 950, nome: "Árvore frondosa" }
+  ];
+
+  const XP_POR_HORA = 5;
+  const TOTAL_HORAS = PROJETOS.reduce((s, p) => s + p.horas, 0);
+  const XP_MAX = TOTAL_HORAS * XP_POR_HORA;
+  const ROTULO = { concluido: "Concluído", ativo: "Em andamento", atrasado: "Atrasado", abandonado: "Abandonado" };
+
+  const inicial = PROJETOS.map(p => p.status);
+  let projetos = PROJETOS.map(p => ({ ...p }));
+  let registro = [];
+
+  function derivar() {
+    const done = projetos.filter(p => p.status === "concluido");
+    const late = projetos.filter(p => p.status === "atrasado").length;
+    const drop = projetos.filter(p => p.status === "abandonado").length;
+    const horas = done.reduce((s, p) => s + p.horas, 0);
+    const xp = horas * XP_POR_HORA;
+
+    let nivel = 0;
+    for (let i = 0; i < NIVEIS.length; i++) if (xp >= NIVEIS[i].min) nivel = i;
+
+    const vitalidade = Math.max(8, Math.min(100, 88 - late * 16 - drop * 28 + done.length * 4));
+
+    const skills = SKILLS.map(s => {
+      const feitos = done.filter(p => p.skills.includes(s.id)).length;
+      return { ...s, feitos: Math.min(feitos, s.req), ok: feitos >= s.req };
+    });
+
+    return { done: done.length, late, drop, horas, xp, nivel, vitalidade, skills, ativas: skills.filter(s => s.ok) };
+  }
+
+  /* =========================================================
+     Canvas — árvore procedural
+     Geração em espaço unitário (tronco = 100 u) + bounding box;
+     o desenho escala esse desenho para ocupar uma fração da
+     altura do canvas que cresce junto com o XP.
+     ========================================================= */
+
+  const cv = document.getElementById("tree");
+  const ctx = cv.getContext("2d");
+  const reduz = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const SEMENTE = 20260916;
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  let W = 0, H = 0, pal = null;
+
+  function tok(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || "#888"; }
+  function rgbOf(hex) {
+    let h = hex.replace("#", "");
+    if (h.length === 3) h = h.split("").map(c => c + c).join("");
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  }
+  function mix(a, b, t) {
+    const A = rgbOf(a), B = rgbOf(b);
+    return "rgb(" + Math.round(A[0] + (B[0] - A[0]) * t) + "," + Math.round(A[1] + (B[1] - A[1]) * t) + "," + Math.round(A[2] + (B[2] - A[2]) * t) + ")";
+  }
+  function rgba(hex, a) { const c = rgbOf(hex); return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")"; }
+
+  function lerPaleta() {
+    pal = {
+      skyTop: tok("--sky-top"), skyBot: tok("--sky-bot"),
+      barkLive: tok("--bark-live"), barkDead: tok("--bark-dead"),
+      leafLive: tok("--leaf-live"), leafDeep: tok("--leaf-deep"),
+      leafDead: tok("--leaf-dead"), leafAsh: tok("--leaf-ash"),
+      soil: tok("--soil"), halo: tok("--halo")
+    };
+  }
+
+  function dimensionar() {
+    const r = cv.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = Math.max(1, Math.round(r.width));
+    H = Math.max(1, Math.round(r.height));
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  // valores animados
+  const A = { g: 0.05, v: 0.5, frutos: [] };
+  let alvo = { g: 0.05, v: 0.5 };
+  let folhasVisiveis = 0, pulso = 0;
+  const parts = [];
+  const poeira = [];
+  for (let i = 0; i < 14; i++) poeira.push({ x: Math.random(), y: Math.random(), v: .05 + Math.random() * .1, r: .6 + Math.random() * 1.2, f: Math.random() * 6.28 });
+
+  const TRONCO_U = 100;
+
+  function gerar(growth, tempo, vento) {
+    const rnd = mulberry32(SEMENTE);
+    const galhos = [];
+    const pontas = [];
+    const prof = Math.round(3 + growth * 5);
+    let minX = 0, maxX = 0, minY = 0;
+
+    function marcar(x, y) { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; }
+
+    function ramo(x, y, ang, comp, esp, d) {
+      const bal = Math.sin(tempo * 0.0009 + d * 0.7 + x * 0.02) * 0.020 * (prof - d + 1) * vento;
+      const a = ang + bal;
+      const x2 = x + Math.cos(a) * comp;
+      const y2 = y + Math.sin(a) * comp;
+      galhos.push({ x1: x, y1: y, x2: x2, y2: y2, w: esp });
+      marcar(x2, y2);
+
+      if (d <= 1 || comp < 6) {
+        const n = 2 + Math.floor(rnd() * 2);
+        for (let i = 0; i < n; i++) {
+          const lx = x2 + (rnd() - 0.5) * comp * 1.1;
+          const ly = y2 + (rnd() - 0.5) * comp * 1.1;
+          pontas.push({ x: lx, y: ly, r: 5.5 + rnd() * 4, a: a + (rnd() - 0.5) * 1.6, tom: rnd(), dist: 0 });
+          marcar(lx, ly);
+        }
+        return;
+      }
+
+      const abertura = 0.40 + rnd() * 0.26;
+      const filhos = (d >= prof - 1 && rnd() < 0.45) ? 3 : 2;
+      for (let i = 0; i < filhos; i++) {
+        const lado = filhos === 3 ? (i - 1) : (i === 0 ? -1 : 1);
+        const jit = (rnd() - 0.5) * 0.30;
+        ramo(x2, y2, a + abertura * lado + jit, comp * (0.70 + rnd() * 0.10), esp * 0.68, d - 1);
+      }
+    }
+
+    ramo(0, 0, -Math.PI / 2, TRONCO_U, 9, prof);
+
+    // folhas ordenadas de dentro para fora: as externas caem primeiro
+    const cy = minY * 0.55;
+    for (const p of pontas) p.dist = p.x * p.x + (p.y - cy) * (p.y - cy);
+    pontas.sort((a, b) => a.dist - b.dist);
+
+    return { galhos: galhos, pontas: pontas, minX: minX, maxX: maxX, minY: minY, prof: prof };
+  }
+
+  function desenhar(t) {
+    if (!pal) lerPaleta();
+    const g = A.g, v = A.v, seco = 1 - v;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // céu
+    const ceu = ctx.createLinearGradient(0, 0, 0, H);
+    ceu.addColorStop(0, pal.skyTop);
+    ceu.addColorStop(1, pal.skyBot);
+    ctx.fillStyle = ceu;
+    ctx.fillRect(0, 0, W, H);
+
+    // poeira de pólen quando a árvore está saudável
+    if (!reduz.matches && v > 0.45) {
+      for (const p of poeira) {
+        p.y -= p.v * 0.0016;
+        if (p.y < -0.04) { p.y = 1.04; p.x = Math.random(); }
+        ctx.fillStyle = rgba(pal.leafLive, (v - 0.45) * 0.5 * (0.5 + 0.5 * Math.sin(t * 0.001 + p.f)));
+        ctx.beginPath();
+        ctx.arc(p.x * W + Math.sin(t * 0.0006 + p.f) * 10, p.y * H, p.r, 0, 6.2832);
+        ctx.fill();
+      }
+    }
+
+    const vento = reduz.matches ? 0 : (0.6 + seco * 1.5);
+    const arv = gerar(g, t, vento);
+
+    // --- enquadramento: a árvore ocupa de 42% a 96% da altura útil ---
+    const baseY = H - Math.max(30, H * 0.085);
+    const dispH = baseY - 16;
+    const dispW = W - 30;
+    const alturaAlvo = dispH * (0.42 + 0.54 * g);
+    const k = Math.min(alturaAlvo / Math.max(1, -arv.minY), dispW / Math.max(1, arv.maxX - arv.minX));
+    const baseX = W * 0.5 - ((arv.minX + arv.maxX) / 2) * k * 0.35;
+
+    const TX = x => baseX + x * k;
+    const TY = y => baseY + y * k;
+
+    // halo de saúde atrás da copa
+    if (v > 0.22) {
+      const hx = TX((arv.minX + arv.maxX) / 2);
+      const hy = TY(arv.minY * 0.55);
+      const hr = Math.max(50, (arv.maxX - arv.minX) * k * 0.62);
+      const halo = ctx.createRadialGradient(hx, hy, 0, hx, hy, hr);
+      halo.addColorStop(0, pal.halo);
+      halo.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.globalAlpha = (v - 0.22) * 0.95;
+      ctx.fillStyle = halo;
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalAlpha = 1;
+    }
+
+    // solo
+    const raio = 44 + TRONCO_U * k * 0.95;
+    ctx.fillStyle = pal.soil;
+    ctx.globalAlpha = 0.5 + v * 0.4;
+    ctx.beginPath();
+    ctx.ellipse(baseX, baseY + 5, raio, 10 + 7 * g, 0, 0, 6.2832);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // raízes: crescem com o XP, metáfora direta da extensão
+    ctx.strokeStyle = mix(pal.barkLive, pal.barkDead, seco * 0.85);
+    ctx.globalAlpha = 0.30 + v * 0.18;
+    ctx.lineCap = "round";
+    const rz = mulberry32(SEMENTE + 7);
+    for (let i = 0; i < 5; i++) {
+      const dir = (i - 2) / 2;
+      const comp = raio * (0.42 + rz() * 0.55) * (0.5 + g * 0.6);
+      ctx.lineWidth = Math.max(1, (4 - Math.abs(dir) * 1.4) * (0.5 + g));
+      ctx.beginPath();
+      ctx.moveTo(baseX, baseY);
+      ctx.quadraticCurveTo(baseX + dir * comp * 0.7, baseY + 4, baseX + dir * comp, baseY + 12 + rz() * 6);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    // pulso de crescimento ao concluir um projeto
+    if (pulso > 0) {
+      pulso = Math.max(0, pulso - 0.015);
+      const p = 1 - pulso;
+      ctx.strokeStyle = rgba(pal.leafLive, pulso * 0.55);
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(baseX, baseY + 2, 30 + p * raio * 1.6, (30 + p * raio * 1.6) * 0.22, 0, 0, 6.2832);
+      ctx.stroke();
+    }
+
+    // galhos
+    const casca = mix(pal.barkLive, pal.barkDead, seco * 0.85);
+    ctx.strokeStyle = casca;
+    for (const b of arv.galhos) {
+      ctx.lineWidth = Math.max(0.6, b.w * k);
+      ctx.beginPath();
+      ctx.moveTo(TX(b.x1), TY(b.y1));
+      ctx.lineTo(TX(b.x2), TY(b.y2));
+      ctx.stroke();
+    }
+
+    // folhas — quantas sobrevivem depende da vitalidade
+    const total = arv.pontas.length;
+    const alvoFolhas = Math.round(total * (0.10 + 0.90 * Math.pow(v, 1.25)));
+
+    if (folhasVisiveis > alvoFolhas + 0.6 && !reduz.matches) {
+      for (let i = 0; i < 3; i++) {
+        const f = arv.pontas[Math.max(0, Math.round(folhasVisiveis) - 1 - i)];
+        if (f) parts.push({
+          x: TX(f.x), y: TY(f.y), vx: (Math.random() - 0.5) * .6, vy: .25 + Math.random() * .4,
+          rot: Math.random() * 6.28, vr: (Math.random() - .5) * .08, r: f.r * k, vida: 1,
+          cor: mix(pal.leafDead, pal.leafAsh, .4), gir: true
+        });
+      }
+    }
+    folhasVisiveis += (alvoFolhas - folhasVisiveis) * (reduz.matches ? 1 : 0.08);
+    const mostrar = Math.round(folhasVisiveis);
+
+    for (let i = 0; i < mostrar && i < total; i++) {
+      const f = arv.pontas[i];
+      const viva = mix(pal.leafDeep, pal.leafLive, f.tom);
+      const morta = mix(pal.leafDead, pal.leafAsh, f.tom);
+      ctx.fillStyle = mix(viva, morta, Math.pow(seco, 0.8));
+      ctx.save();
+      ctx.translate(TX(f.x), TY(f.y));
+      ctx.rotate(f.a);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, f.r * k * (0.7 + v * 0.45), f.r * k * 0.5, 0, 0, 6.2832);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // frutos luminosos: uma soft skill desbloqueada = um fruto
+    const fr = A.frutos;
+    for (let i = 0; i < fr.length; i++) {
+      const o = fr[i];
+      o.pop += (1 - o.pop) * 0.1;
+      const idx = Math.min(total - 1, Math.floor(total * (0.35 + 0.58 * ((i + 0.5) / fr.length))));
+      const anc = arv.pontas[idx];
+      if (!anc) continue;
+      const bob = reduz.matches ? 0 : Math.sin(t * 0.0016 + i * 1.7) * 2.2;
+      const fx = TX(anc.x), fy = TY(anc.y) + bob;
+      const rr = (5.5 + 2.5 * g) * o.pop;
+      const gg = ctx.createRadialGradient(fx, fy, 0, fx, fy, rr * 3.4);
+      gg.addColorStop(0, rgba(o.cor, 0.75));
+      gg.addColorStop(1, rgba(o.cor, 0));
+      ctx.fillStyle = gg;
+      ctx.beginPath(); ctx.arc(fx, fy, rr * 3.4, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = o.cor;
+      ctx.beginPath(); ctx.arc(fx, fy, rr, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,.55)";
+      ctx.beginPath(); ctx.arc(fx - rr * 0.3, fy - rr * 0.35, rr * 0.28, 0, 6.2832); ctx.fill();
+    }
+
+    // partículas
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      p.x += p.vx + (p.gir ? Math.sin(t * 0.002 + p.rot) * 0.5 : 0);
+      p.y += p.vy;
+      p.vy = Math.min(p.vy + (p.gir ? 0.008 : 0.014), 1.4);
+      p.rot += p.vr;
+      p.vida -= p.gir ? 0.006 : 0.014;
+      if (p.vida <= 0 || p.y > H + 20) { parts.splice(i, 1); continue; }
+      ctx.globalAlpha = Math.max(0, Math.min(1, p.vida));
+      ctx.fillStyle = p.cor;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.r, p.r * (p.gir ? 0.5 : 1), 0, 0, 6.2832);
+      ctx.fill();
+      ctx.restore();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  function faisca(n, cor) {
+    for (let i = 0; i < n; i++) parts.push({
+      x: W * 0.5 + (Math.random() - 0.5) * W * 0.5,
+      y: H * 0.85 + Math.random() * 20,
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: -(0.9 + Math.random() * 1.3),
+      rot: 0, vr: 0, r: 1.3 + Math.random() * 1.8,
+      vida: 1, cor: cor, gir: false
+    });
+  }
+
+  function loop(t) {
+    const k = reduz.matches ? 1 : 0.055;
+    A.g += (alvo.g - A.g) * k;
+    A.v += (alvo.v - A.v) * k;
+    desenhar(t);
+    requestAnimationFrame(loop);
+  }
+
+  /* =========================================================
+     Render da interface
+     ========================================================= */
+
+  const el = {
+    ledger: document.getElementById("ledger"), grove: document.getElementById("grove"),
+    log: document.getElementById("log"), toasts: document.getElementById("toasts"),
+    levelName: document.getElementById("levelName"), levelRank: document.getElementById("levelRank"),
+    xpVal: document.getElementById("xpVal"), xpFill: document.getElementById("xpFill"),
+    xpFoot: document.getElementById("xpFoot"), xpTrack: document.getElementById("xpTrack"),
+    vitVal: document.getElementById("vitVal"), vitFill: document.getElementById("vitFill"),
+    vitFoot: document.getElementById("vitFoot"),
+    nDone: document.getElementById("nDone"), nLate: document.getElementById("nLate"), nDrop: document.getElementById("nDrop"),
+    caption: document.getElementById("caption"), summary: document.getElementById("treeSummary"),
+    skillCount: document.getElementById("skillCount"), hoursNote: document.getElementById("hoursNote")
+  };
+
+  // marcas dos níveis na barra de XP
+  el.xpTrack.insertAdjacentHTML("beforeend", NIVEIS.slice(1).map(n =>
+    `<span class="tick" style="left:${(n.min / XP_MAX) * 100}%"></span>`).join(""));
+
+  const ACOES = {
+    concluido:  [{ t: "Reabrir projeto", a: "ativo", c: "" }],
+    ativo:      [{ t: "Marcar como concluído", a: "concluido", c: "primary" },
+                 { t: "Reportar atraso", a: "atrasado", c: "warn" },
+                 { t: "Abandonar", a: "abandonado", c: "danger" }],
+    atrasado:   [{ t: "Entregar mesmo assim", a: "concluido", c: "primary" },
+                 { t: "Voltar ao ritmo", a: "ativo", c: "" },
+                 { t: "Abandonar", a: "abandonado", c: "danger" }],
+    abandonado: [{ t: "Retomar projeto", a: "ativo", c: "" }]
+  };
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+  function skill(id) { return SKILLS.find(x => x.id === id); }
+
+  function renderLedger(d) {
+    el.ledger.innerHTML = projetos.map(p => {
+      const acoes = ACOES[p.status].map(a =>
+        `<button type="button" class="${a.c}" data-p="${p.id}" data-a="${a.a}">${esc(a.t)}</button>`).join("");
+      const tags = p.skills.map(id => {
+        const sk = d.skills.find(x => x.id === id);
+        return `<span class="tag${sk.ok ? " won" : ""}" style="--o:${sk.cor}"><span class="o"></span>${esc(sk.nome)}</span>`;
+      }).join("");
+      return `
+        <article class="row" data-status="${p.status}">
+          <div class="r-top">
+            <div>
+              <h3 class="r-title">${esc(p.titulo)}</h3>
+              <p class="r-meta"><span>${esc(p.area)}</span><span class="sep">/</span><span class="num">${p.horas} h</span><span class="sep">/</span><span>entrega ${esc(p.prazo)}</span></p>
+            </div>
+            <span class="chip" data-status="${p.status}">${ROTULO[p.status]}</span>
+          </div>
+          <div class="r-tags">${tags}</div>
+          <div class="r-actions">${acoes}</div>
+        </article>`;
+    }).join("");
+  }
+
+  function renderSkills(d, novas) {
+    el.grove.innerHTML = d.skills.map(s => `
+      <div class="skill${s.ok ? " unlocked" : ""}${novas.has(s.id) ? " bloom" : ""}" style="--o:${s.cor}">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${s.icon}"/></svg></span>
+        <b>${esc(s.nome)}</b>
+        <div class="prog">
+          <div class="track"><div class="fill" style="width:${(s.feitos / s.req) * 100}%"></div></div>
+          <span class="n">${s.feitos}/${s.req}</span>
+        </div>
+      </div>`).join("");
+    el.skillCount.textContent = d.ativas.length + " / " + SKILLS.length + " · viram frutos na copa";
+  }
+
+  function renderLog() {
+    if (!registro.length) {
+      el.log.innerHTML = `<p class="log-empty">Nenhuma movimentação ainda. As ações dos projetos aparecem aqui.</p>`;
+      return;
+    }
+    el.log.innerHTML = registro.slice(0, 12).map(r => `
+      <div class="log-item">
+        <time>${r.hora}</time>
+        <span><b class="d" style="--k:${r.cor}">${esc(r.verbo)}</b> ${esc(r.texto)}</span>
+      </div>`).join("");
+  }
+
+  function legenda(d) {
+    const v = d.vitalidade / 100;
+    const porte = d.nivel <= 0 ? "Ainda é uma semente no chão"
+      : d.nivel === 1 ? "Um broto de dois palmos"
+      : d.nivel === 2 ? "Muda firme, tronco já definido"
+      : d.nivel === 3 ? "Árvore jovem, copa tomando forma"
+      : d.nivel === 4 ? "Copa larga, galhos em três níveis"
+      : "Árvore frondosa, crescimento máximo";
+    const saude = v >= 0.85 ? "verde e cheia — entregas em dia."
+      : v >= 0.65 ? "verde, mas sentindo a pressão dos prazos."
+      : v >= 0.45 ? "com folhas amarelando: há entregas escorregando."
+      : v >= 0.25 ? "rala — retome os projetos parados antes que sequem."
+      : "quase sem folhas: o semestre foi abandonado.";
+    return porte + ", " + saude;
+  }
+
+  function corVit(v) { return v >= 0.7 ? "var(--good)" : v >= 0.4 ? "var(--warn)" : "var(--crit)"; }
+
+  function render(novas) {
+    novas = novas || new Set();
+    const d = derivar();
+
+    // crescimento: XP dá o porte, a vitalidade encolhe a copa
+    alvo.g = Math.min(1, d.xp / XP_MAX) * (0.55 + 0.45 * (d.vitalidade / 100));
+    alvo.v = d.vitalidade / 100;
+
+    A.frutos = d.ativas.map(s => {
+      const velho = A.frutos.find(o => o.id === s.id);
+      return { id: s.id, cor: s.cor, pop: velho ? velho.pop : 0.15 };
+    });
+
+    const nv = NIVEIS[d.nivel], prox = NIVEIS[d.nivel + 1];
+    el.levelName.textContent = nv.nome;
+    el.levelRank.textContent = "Nível " + (d.nivel + 1) + " de " + NIVEIS.length;
+    el.xpVal.textContent = d.xp + " XP";
+    el.xpFill.style.width = Math.min(100, (d.xp / XP_MAX) * 100) + "%";
+    el.xpFoot.textContent = prox ? (prox.min - d.xp) + " XP para virar " + prox.nome : "Nível máximo — a copa cresceu tudo o que dava.";
+
+    el.vitVal.textContent = d.vitalidade + "%";
+    el.vitFill.style.width = d.vitalidade + "%";
+    el.vitFill.style.background = corVit(d.vitalidade / 100);
+    el.vitFoot.textContent = (d.late || d.drop)
+      ? [d.late ? d.late + (d.late > 1 ? " atrasos" : " atraso") : null,
+         d.drop ? d.drop + (d.drop > 1 ? " abandonos" : " abandono") : null].filter(Boolean).join(" e ") + " drenando a copa"
+      : "Nenhuma pendência drenando a copa";
+
+    el.nDone.textContent = d.done;
+    el.nLate.textContent = d.late;
+    el.nDrop.textContent = d.drop;
+    el.hoursNote.textContent = d.horas + " h de " + TOTAL_HORAS + " h registradas";
+
+    el.caption.textContent = legenda(d);
+    el.summary.textContent = "Nível " + nv.nome + ", " + d.xp + " XP, vitalidade " + d.vitalidade +
+      "%, " + d.ativas.length + " de " + SKILLS.length + " soft skills desbloqueadas.";
+
+    renderLedger(d);
+    renderSkills(d, novas);
+    renderLog();
+    return d;
+  }
+
+  /* =========================================================
+     Interação
+     ========================================================= */
+
+  function agora() {
+    const t = new Date();
+    return String(t.getHours()).padStart(2, "0") + ":" + String(t.getMinutes()).padStart(2, "0");
+  }
+
+  function aviso(texto, cor) {
+    const n = document.createElement("div");
+    n.className = "toast";
+    n.style.setProperty("--k", cor);
+    n.innerHTML = `<span class="dot"></span><span>${esc(texto)}</span>`;
+    el.toasts.appendChild(n);
+    setTimeout(() => {
+      n.style.transition = "opacity .35s ease, transform .35s ease";
+      n.style.opacity = "0"; n.style.transform = "translateY(8px)";
+      setTimeout(() => n.remove(), 400);
+    }, 3200);
+  }
+
+  const VERBO = {
+    concluido:  { v: "Concluído",  cor: "var(--good)" },
+    ativo:      { v: "Retomado",   cor: "var(--accent)" },
+    atrasado:   { v: "Atrasado",   cor: "var(--warn)" },
+    abandonado: { v: "Abandonado", cor: "var(--crit)" }
+  };
+
+  function aplicar(idProjeto, novoStatus) {
+    const p = projetos.find(x => x.id === idProjeto);
+    if (!p || p.status === novoStatus) return;
+
+    const antes = new Set(derivar().ativas.map(s => s.id));
+    const nivelAntes = derivar().nivel;
+    p.status = novoStatus;
+    const d = derivar();
+    const depois = new Set(d.ativas.map(s => s.id));
+    const novas = new Set([...depois].filter(x => !antes.has(x)));
+    const perdidas = [...antes].filter(x => !depois.has(x));
+
+    const info = VERBO[novoStatus];
+    registro.unshift({ hora: agora(), verbo: info.v, texto: p.titulo, cor: info.cor });
+
+    render(novas);
+
+    if (novoStatus === "concluido") {
+      pulso = 1;
+      faisca(18, pal ? pal.leafLive : "#6FA347");
+      aviso("+" + (p.horas * XP_POR_HORA) + " XP — a árvore cresceu.", "var(--good)");
+      if (d.nivel > nivelAntes) {
+        registro.unshift({ hora: agora(), verbo: "Novo nível", texto: NIVEIS[d.nivel].nome, cor: "var(--accent-bright)" });
+        setTimeout(() => aviso("Novo porte: " + NIVEIS[d.nivel].nome, "var(--accent-bright)"), 320);
+      }
+    } else if (novoStatus === "atrasado") {
+      aviso("Atraso registrado. A copa começa a perder folhas.", "var(--warn)");
+    } else if (novoStatus === "abandonado") {
+      aviso("Projeto abandonado. A árvore murcha rápido.", "var(--crit)");
+    } else {
+      aviso("Projeto de volta ao ritmo.", "var(--accent)");
+    }
+
+    novas.forEach(id => {
+      const s = skill(id);
+      registro.unshift({ hora: agora(), verbo: "Novo fruto", texto: "Soft skill " + s.nome, cor: s.cor });
+      faisca(10, s.cor);
+      setTimeout(() => aviso("Soft skill desbloqueada: " + s.nome, s.cor), 260);
+    });
+    perdidas.forEach(id => {
+      const s = skill(id);
+      registro.unshift({ hora: agora(), verbo: "Fruto caiu", texto: "Soft skill " + s.nome, cor: "var(--crit)" });
+    });
+    if (novas.size || perdidas.length) renderLog();
+
+    setTimeout(() => el.grove.querySelectorAll(".bloom").forEach(n => n.classList.remove("bloom")), 900);
+  }
+
+  el.ledger.addEventListener("click", function (e) {
+    const b = e.target.closest("button[data-p]");
+    if (b) aplicar(b.dataset.p, b.dataset.a);
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    projetos = PROJETOS.map((p, i) => ({ ...p, status: inicial[i] }));
+    registro = [];
+    folhasVisiveis = 0;
+    parts.length = 0;
+    pulso = 0;
+    render();
+    aviso("Simulação reiniciada.", "var(--accent)");
+  });
+
+  /* =========================================================
+     Boot
+     ========================================================= */
+
+  function start(saved) {
+    if (saved && Array.isArray(saved.status) && saved.status.length === projetos.length) {
+      projetos.forEach((p, i) => { if (ROTULO[saved.status[i]]) p.status = saved.status[i]; });
+      registro = Array.isArray(saved.registro) ? saved.registro : [];
+    }
+    lerPaleta();
+    dimensionar();
+    render();
+    A.v = alvo.v;
+    A.g = alvo.g * 0.45;
+    requestAnimationFrame(loop);
+  }
+
+  new ResizeObserver(dimensionar).observe(cv.parentElement);
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", lerPaleta);
+  new MutationObserver(lerPaleta).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  const hot = window.claude && window.claude.hot;
+  if (hot) hot.snapshot(() => ({ status: projetos.map(p => p.status), registro: registro }));
+  if (hot && hot.ready) hot.ready(start); else start(hot ? hot.data : null);
+})();
+</script>

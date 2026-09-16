@@ -1,0 +1,67 @@
+name: Publicar no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Permissoes exigidas pelo deploy nativo do Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Uma publicacao por vez; cancela a anterior se vier push novo.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Compilar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias
+        run: npm install --no-audit --no-fund
+
+      # O Pages serve em /<repo>/, exceto nos sites de usuario/organizacao
+      # (<usuario>.github.io), que ficam na raiz. Resolvido aqui para que o
+      # vite.config.js nao precise conhecer o nome do repositorio.
+      - name: Definir o caminho base
+        run: |
+          REPO="${{ github.event.repository.name }}"
+          if [[ "$REPO" == *.github.io ]]; then
+            echo "VITE_BASE=/" >> "$GITHUB_ENV"
+            echo "Site de usuario detectado: base = /"
+          else
+            echo "VITE_BASE=/$REPO/" >> "$GITHUB_ENV"
+            echo "Site de projeto detectado: base = /$REPO/"
+          fi
+
+      - name: Compilar
+        run: npm run build
+
+      - name: Enviar o artefato
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Publicar
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar no Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,12 @@
+# Normaliza tudo para LF no repositorio. Importante para o bloco bash dentro de
+# .github/workflows/deploy.yml: CRLF em script shell quebra no runner Linux.
+* text=auto eol=lf
+
+# Binarios, se algum dia entrarem
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.woff binary
+*.woff2 binary
+*.ico binary

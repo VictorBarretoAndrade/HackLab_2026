@@ -1,0 +1,163 @@
+/* ============================================================
+   Tokens — padrao de tres estados.
+
+   :root puro                          -> paleta clara COMPLETA
+   @media (prefers-color-scheme: dark) -> redefine so os tokens
+   :root[data-theme="dark"]            -> redefine de novo
+
+   Toda cor e declarada no :root antes de ser redefinida. Uma cor
+   que so existisse dentro de um bloco @media ou [data-theme] nao
+   se aplicaria no modo "sistema", que nao carimba atributo nenhum.
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+
+  /* superficies e tinta */
+  --plane: #edf2ef;
+  --surface: #fbfcfa;
+  --surface-2: #f3f6f4;
+  --ink: #0d1a17;
+  --ink-2: #41534e;
+  --muted: #74857f;
+  --grid: #e2e7e3;
+  --axis: #c6d0cb;
+  --hairline: rgba(13, 26, 23, 0.12);
+  --shadow: 0 16px 38px -26px rgba(8, 40, 38, 0.5);
+  --shadow-lift: 0 30px 66px -34px rgba(8, 40, 38, 0.62);
+
+  /* acento de interface (nao e cor de dado) */
+  --accent: #0e7c6b;
+  --accent-soft: rgba(14, 124, 107, 0.1);
+
+  /* ---- cores de dado (paleta validada) ----
+     Serie unica: passa os seis checks nos dois modos.
+     Status: paleta fixa. O par verde<->vermelho mede dE 4,1 sob
+     deuteranopia, entao a cor NUNCA carrega sentido sozinha:
+     todo status vem com icone de forma distinta + palavra. */
+  --series: #1baf7a;
+  --series-wash: rgba(27, 175, 122, 0.14);
+  --good: #0ca30c;
+  --warn: #fab219;
+  --crit: #d03b3b;
+  --idle: #7a8d8d;
+  --good-soft: rgba(12, 163, 12, 0.13);
+  --warn-soft: rgba(250, 178, 25, 0.18);
+  --crit-soft: rgba(208, 59, 59, 0.13);
+  --idle-soft: rgba(122, 141, 141, 0.16);
+  --good-ink: #0a7a0a;
+  --warn-ink: #8a5e00;
+  --crit-ink: #a52c2c;
+  --idle-ink: #5f7370;
+  --track: #e4eae6;
+
+  /* canvas da arvore */
+  --sky-top: #e8efe9;
+  --sky-bot: #f7faf6;
+  --bark-live: #4c3a2b;
+  --bark-dead: #6f6a62;
+  --leaf-live: #6fa347;
+  --leaf-deep: #2f6b4f;
+  --leaf-dead: #a8794a;
+  --leaf-ash: #8d8b80;
+  --soil: #c9cfbe;
+  --halo: rgba(146, 196, 96, 0.4);
+
+  /* metricas */
+  --radius: 14px;
+  --radius-sm: 9px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --plane: #08110f;
+    --surface: #141f1d;
+    --surface-2: #1a2724;
+    --ink: #eaf2ef;
+    --ink-2: #afc0ba;
+    --muted: #82918b;
+    --grid: #233330;
+    --axis: #2e403c;
+    --hairline: rgba(234, 242, 239, 0.12);
+    --shadow: 0 16px 38px -26px rgba(0, 0, 0, 0.85);
+    --shadow-lift: 0 30px 66px -32px rgba(0, 0, 0, 0.92);
+
+    --accent: #4ed6ba;
+    --accent-soft: rgba(78, 214, 186, 0.13);
+
+    --series: #199e70;
+    --series-wash: rgba(25, 158, 112, 0.18);
+    --good: #0ca30c;
+    --warn: #fab219;
+    --crit: #d03b3b;
+    --idle: #839595;
+    --good-soft: rgba(12, 163, 12, 0.18);
+    --warn-soft: rgba(250, 178, 25, 0.16);
+    --crit-soft: rgba(208, 59, 59, 0.2);
+    --idle-soft: rgba(131, 149, 149, 0.16);
+    --good-ink: #4fd44f;
+    --warn-ink: #f0b83c;
+    --crit-ink: #ef7a7a;
+    --idle-ink: #9aaba7;
+    --track: #22302c;
+
+    --sky-top: #142019;
+    --sky-bot: #0d1611;
+    --bark-live: #6a5140;
+    --bark-dead: #5a564f;
+    --leaf-live: #79b14f;
+    --leaf-deep: #3c7f5c;
+    --leaf-dead: #8a6238;
+    --leaf-ash: #6d6c64;
+    --soil: #26332a;
+    --halo: rgba(120, 180, 90, 0.28);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --plane: #08110f;
+  --surface: #141f1d;
+  --surface-2: #1a2724;
+  --ink: #eaf2ef;
+  --ink-2: #afc0ba;
+  --muted: #82918b;
+  --grid: #233330;
+  --axis: #2e403c;
+  --hairline: rgba(234, 242, 239, 0.12);
+  --shadow: 0 16px 38px -26px rgba(0, 0, 0, 0.85);
+  --shadow-lift: 0 30px 66px -32px rgba(0, 0, 0, 0.92);
+
+  --accent: #4ed6ba;
+  --accent-soft: rgba(78, 214, 186, 0.13);
+
+  --series: #199e70;
+  --series-wash: rgba(25, 158, 112, 0.18);
+  --good: #0ca30c;
+  --warn: #fab219;
+  --crit: #d03b3b;
+  --idle: #839595;
+  --good-soft: rgba(12, 163, 12, 0.18);
+  --warn-soft: rgba(250, 178, 25, 0.16);
+  --crit-soft: rgba(208, 59, 59, 0.2);
+  --idle-soft: rgba(131, 149, 149, 0.16);
+  --good-ink: #4fd44f;
+  --warn-ink: #f0b83c;
+  --crit-ink: #ef7a7a;
+  --idle-ink: #9aaba7;
+  --track: #22302c;
+
+  --sky-top: #142019;
+  --sky-bot: #0d1611;
+  --bark-live: #6a5140;
+  --bark-dead: #5a564f;
+  --leaf-live: #79b14f;
+  --leaf-deep: #3c7f5c;
+  --leaf-dead: #8a6238;
+  --leaf-ash: #6d6c64;
+  --soil: #26332a;
+  --halo: rgba(120, 180, 90, 0.28);
+}

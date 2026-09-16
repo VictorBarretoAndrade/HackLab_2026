@@ -1,0 +1,545 @@
+/* ============================================================
+   Visao do aluno — arvore, trilha de estado, projetos, skills
+   ============================================================ */
+
+.aluno-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 28px;
+}
+
+.aluno-hero h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 700;
+  font-size: clamp(26px, 3.6vw, 36px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  font-variation-settings: 'SOFT' 40, 'WONK' 1;
+}
+
+.aluno-hero .lede {
+  margin: 6px 0 0;
+  color: var(--ink-2);
+  font-size: 14px;
+  max-width: 56ch;
+}
+
+.identidade {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px 8px 8px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.identidade .av {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: var(--surface);
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 15px;
+  flex: none;
+}
+
+.identidade .who {
+  display: grid;
+  line-height: 1.25;
+}
+
+.identidade .who b {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.identidade .who span {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* ---------- copa ---------- */
+.copa {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lift);
+}
+
+.palco {
+  position: relative;
+  min-height: 430px;
+}
+
+.palco canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+}
+
+.palco-tag {
+  position: absolute;
+  left: 20px;
+  top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.palco-tag .brilho {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--leaf-live);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+.palco-legenda {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 16px;
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* ---------- trilha lateral ---------- */
+.trilha {
+  border-left: 1px solid var(--hairline);
+  padding: 22px 22px 24px;
+  display: grid;
+  align-content: start;
+  gap: 20px;
+  background: var(--surface-2);
+}
+
+.trilha .nivel {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: clamp(23px, 2.3vw, 29px);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  margin: 4px 0 0;
+  font-variation-settings: 'SOFT' 60, 'WONK' 1;
+}
+
+.trilha .posto {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: 2px 0 0;
+}
+
+.medidor {
+  display: grid;
+  gap: 7px;
+}
+
+.medidor-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.medidor-topo .v {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.medidor .pe {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.medidor .track > i.horas {
+  background: linear-gradient(90deg, var(--accent), var(--leaf-live));
+}
+
+.marca {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  width: 1px;
+  background: var(--hairline);
+}
+
+.contagem {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.contagem div {
+  background: var(--surface-2);
+  padding: 11px 10px;
+  display: grid;
+  gap: 2px;
+}
+
+.contagem b {
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.contagem span {
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.contagem .c-good b {
+  color: var(--good-ink);
+}
+.contagem .c-warn b {
+  color: var(--warn-ink);
+}
+.contagem .c-crit b {
+  color: var(--crit-ink);
+}
+
+/* ---------- colunas inferiores ---------- */
+.aluno-baixo {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.aluno-col {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+
+/* ---------- lista de projetos ---------- */
+.ledger {
+  display: grid;
+}
+
+.linha {
+  display: grid;
+  gap: 12px;
+  padding: 15px 20px 17px 17px;
+  border-top: 1px solid var(--grid);
+  border-left: 3px solid var(--st);
+  transition:
+    background-color 0.3s,
+    border-color 0.5s;
+}
+
+.linha[data-status='concluido'] {
+  --st: var(--good);
+}
+.linha[data-status='ativo'] {
+  --st: var(--accent);
+}
+.linha[data-status='atrasado'] {
+  --st: var(--warn);
+}
+.linha[data-status='abandonado'] {
+  --st: var(--idle);
+}
+
+.linha[data-status='abandonado'] .titulo {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.linha:hover {
+  background: var(--accent-soft);
+}
+
+.linha-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.linha .titulo {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 3px;
+}
+
+.linha .meta {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 9px;
+}
+
+.linha .meta .sep {
+  opacity: 0.4;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-2);
+  border: 1px solid var(--hairline);
+  border-radius: 99px;
+  padding: 2px 10px 2px 7px;
+}
+
+.tag .o {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--o);
+  opacity: 0.35;
+}
+
+.tag[data-ok='true'] {
+  border-color: transparent;
+  background: var(--good-soft);
+  color: var(--good-ink);
+  font-weight: 600;
+}
+
+.tag[data-ok='true'] .o {
+  opacity: 1;
+  box-shadow: 0 0 7px 1px var(--o);
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ledger-pe {
+  padding: 13px 20px 17px;
+  border-top: 1px solid var(--grid);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ledger-pe .nota {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---------- bosque de soft skills ---------- */
+.bosque {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--grid);
+  border-top: 1px solid var(--grid);
+}
+
+.skill {
+  background: var(--surface);
+  padding: 14px 15px 13px;
+  display: grid;
+  gap: 9px;
+  align-content: start;
+  transition: background-color 0.4s;
+}
+
+.skill .ico {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--idle-soft);
+  color: var(--muted);
+  transition:
+    background-color 0.5s,
+    color 0.5s,
+    box-shadow 0.5s;
+}
+
+.skill .ico svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.skill b {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--muted);
+  transition: color 0.5s;
+}
+
+.skill .prog {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skill .prog .track {
+  flex: 1;
+  height: 5px;
+}
+
+.skill .prog .n {
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.skill .track > i {
+  background: var(--idle);
+}
+
+.skill[data-ok='true'] {
+  background: color-mix(in srgb, var(--accent-soft) 55%, var(--surface));
+}
+
+.skill[data-ok='true'] .ico {
+  background: color-mix(in srgb, var(--o) 20%, transparent);
+  color: var(--o);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--o) 38%, transparent);
+}
+
+.skill[data-ok='true'] b {
+  color: var(--ink);
+}
+
+.skill[data-ok='true'] .track > i {
+  background: var(--o);
+}
+
+.skill[data-ok='true'] .n {
+  color: var(--ink-2);
+}
+
+@keyframes florescer {
+  0% {
+    transform: scale(0.82) rotate(-8deg);
+    opacity: 0.4;
+  }
+  55% {
+    transform: scale(1.14) rotate(4deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes anel {
+  from {
+    box-shadow: 0 0 0 0 var(--o);
+  }
+  to {
+    box-shadow: 0 0 0 16px transparent;
+  }
+}
+
+.skill[data-novo='true'] .ico {
+  animation:
+    florescer 0.75s cubic-bezier(0.2, 0.9, 0.3, 1.2) both,
+    anel 0.9s ease-out 0.1s both;
+}
+
+/* ---------- registro ---------- */
+.registro {
+  display: grid;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.registro-item {
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px 20px;
+  border-top: 1px solid var(--grid);
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.registro-item time {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  padding-top: 2px;
+}
+
+.registro-item .verbo {
+  color: var(--k);
+  font-weight: 700;
+}
+
+.vazio {
+  padding: 16px 20px 20px;
+  font-size: 13px;
+  color: var(--muted);
+  border-top: 1px solid var(--grid);
+  margin: 0;
+}
+
+/* ---------- responsivo ---------- */
+@media (max-width: 980px) {
+  .aluno-baixo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 780px) {
+  .copa {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .trilha {
+    border-left: 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .palco {
+    min-height: 340px;
+  }
+  .linha-topo {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 420px) {
+  .bosque {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

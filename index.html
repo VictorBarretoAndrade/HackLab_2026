@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Raiz — Extensão Gamificada</title>
+    <meta
+      name="description"
+      content="Acompanhamento de projetos de extensão universitária com desenvolvimento de soft skills: uma árvore que cresce com as entregas do aluno e um painel de aderência curricular para a coordenação."
+    />
+    <meta name="theme-color" content="#0E7C6B" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E7C6B'/%3E%3Cpath d='M16 25V13' stroke='%23F1E4C8' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M16 17l-5-4M16 15l5-4' stroke='%23F1E4C8' stroke-width='2.2' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='9' r='3.4' fill='%237FCf9C'/%3E%3Ccircle cx='10' cy='12' r='2.6' fill='%237FCf9C'/%3E%3Ccircle cx='22' cy='12' r='2.6' fill='%237FCf9C'/%3E%3C/svg%3E"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    />
+
+    <script>
+      // Aplica o tema salvo antes da primeira pintura, para nao piscar branco
+      // em quem escolheu o escuro.
+      (function () {
+        try {
+          var t = localStorage.getItem('raiz:tema')
+          if (t === 'dark' || t === 'light') {
+            document.documentElement.setAttribute('data-theme', t)
+          }
+        } catch (e) {
+          /* modo privado bloqueia o storage: segue no tema do sistema */
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      Este painel precisa de JavaScript para desenhar a árvore e calcular os indicadores.
+    </noscript>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

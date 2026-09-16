@@ -1,0 +1,1104 @@
+<title>Xodó de Extensão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,800&family=DM+Mono:wght@400;500&display=swap">
+
+<style>
+  /* ============ tokens: tema claro completo em :root ============ */
+  :root {
+    --ink:           #0D2429;
+    --ink-soft:      #2F4A4C;
+    --muted:         #6B8486;
+    --hairline:      rgba(13, 36, 41, .13);
+    --hairline-2:    rgba(13, 36, 41, .07);
+
+    --bg:            #E9F0ED;
+    --wash-1:        rgba(78, 214, 186, .26);
+    --wash-2:        rgba(243, 193, 107, .20);
+    --wash-3:        rgba(193, 80, 58, .10);
+
+    --surface:       rgba(255, 255, 255, .70);
+    --surface-2:     rgba(255, 255, 255, .88);
+    --edge:          rgba(255, 255, 255, .80);
+    --shadow:        0 16px 38px -26px rgba(8, 40, 38, .55);
+    --shadow-lift:   0 34px 70px -34px rgba(8, 40, 38, .70);
+
+    --accent:        #0E7C6B;
+    --accent-soft:   rgba(14, 124, 107, .11);
+
+    --good:          #4E9A3F;
+    --warn:          #B8811C;
+    --crit:          #C1503A;
+    --idle:          #7A8D8D;
+    --chip-good:     rgba(78, 154, 63, .14);
+    --chip-warn:     rgba(184, 129, 28, .16);
+    --chip-crit:     rgba(193, 80, 58, .14);
+    --chip-idle:     rgba(122, 141, 141, .16);
+
+    /* interior da cápsula — sempre mais fundo que a página */
+    --hab-1:         #164046;
+    --hab-2:         #0B2A2F;
+    --hab-edge:      rgba(120, 190, 180, .22);
+    --hab-ink:       #E4F5F0;
+    --hab-mute:      rgba(198, 227, 221, .62);
+
+    --body-live:     #F3C16B;
+    --body-dim:      #9A958C;
+    --belly-live:    #FFDFA4;
+    --belly-dim:     #B6B2AA;
+    --face:          #17323A;
+    --glow-live:     rgba(243, 193, 107, .55);
+    --glow-dim:      rgba(150, 165, 165, .22);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink:           #E4F1ED;
+      --ink-soft:      #B6CDC8;
+      --muted:         #849C99;
+      --hairline:      rgba(206, 235, 229, .14);
+      --hairline-2:    rgba(206, 235, 229, .07);
+
+      --bg:            #071619;
+      --wash-1:        rgba(78, 214, 186, .18);
+      --wash-2:        rgba(243, 193, 107, .12);
+      --wash-3:        rgba(232, 127, 99, .08);
+
+      --surface:       rgba(20, 44, 46, .62);
+      --surface-2:     rgba(23, 50, 52, .85);
+      --edge:          rgba(150, 210, 200, .14);
+      --shadow:        0 16px 38px -26px rgba(0, 0, 0, .85);
+      --shadow-lift:   0 34px 70px -32px rgba(0, 0, 0, .92);
+
+      --accent:        #4ED6BA;
+      --accent-soft:   rgba(78, 214, 186, .14);
+
+      --good:          #8CC96A;
+      --warn:          #E5B54A;
+      --crit:          #E87F63;
+      --idle:          #839595;
+      --chip-good:     rgba(140, 201, 106, .15);
+      --chip-warn:     rgba(229, 181, 74, .15);
+      --chip-crit:     rgba(232, 127, 99, .15);
+      --chip-idle:     rgba(131, 149, 149, .16);
+
+      --hab-1:         #0F2F35;
+      --hab-2:         #061518;
+      --hab-edge:      rgba(120, 190, 180, .16);
+      --hab-ink:       #E4F5F0;
+      --hab-mute:      rgba(198, 227, 221, .58);
+
+      --body-live:     #F3C16B;
+      --body-dim:      #7E8A8A;
+      --belly-live:    #FFDFA4;
+      --belly-dim:     #97A2A2;
+      --face:          #11262C;
+      --glow-live:     rgba(243, 193, 107, .48);
+      --glow-dim:      rgba(120, 140, 140, .18);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ink:           #E4F1ED;
+    --ink-soft:      #B6CDC8;
+    --muted:         #849C99;
+    --hairline:      rgba(206, 235, 229, .14);
+    --hairline-2:    rgba(206, 235, 229, .07);
+
+    --bg:            #071619;
+    --wash-1:        rgba(78, 214, 186, .18);
+    --wash-2:        rgba(243, 193, 107, .12);
+    --wash-3:        rgba(232, 127, 99, .08);
+
+    --surface:       rgba(20, 44, 46, .62);
+    --surface-2:     rgba(23, 50, 52, .85);
+    --edge:          rgba(150, 210, 200, .14);
+    --shadow:        0 16px 38px -26px rgba(0, 0, 0, .85);
+    --shadow-lift:   0 34px 70px -32px rgba(0, 0, 0, .92);
+
+    --accent:        #4ED6BA;
+    --accent-soft:   rgba(78, 214, 186, .14);
+
+    --good:          #8CC96A;
+    --warn:          #E5B54A;
+    --crit:          #E87F63;
+    --idle:          #839595;
+    --chip-good:     rgba(140, 201, 106, .15);
+    --chip-warn:     rgba(229, 181, 74, .15);
+    --chip-crit:     rgba(232, 127, 99, .15);
+    --chip-idle:     rgba(131, 149, 149, .16);
+
+    --hab-1:         #0F2F35;
+    --hab-2:         #061518;
+    --hab-edge:      rgba(120, 190, 180, .16);
+    --hab-ink:       #E4F5F0;
+    --hab-mute:      rgba(198, 227, 221, .58);
+
+    --body-live:     #F3C16B;
+    --body-dim:      #7E8A8A;
+    --belly-live:    #FFDFA4;
+    --belly-dim:     #97A2A2;
+    --face:          #11262C;
+    --glow-live:     rgba(243, 193, 107, .48);
+    --glow-dim:      rgba(120, 140, 140, .18);
+  }
+
+  /* ============ base ============ */
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding-inline: 20px;
+    padding-block: 26px 60px;
+    background: var(--bg);
+    background-image:
+      radial-gradient(820px 600px at 6% -8%,  var(--wash-1), transparent 60%),
+      radial-gradient(700px 520px at 96% 4%,  var(--wash-2), transparent 58%),
+      radial-gradient(640px 500px at 52% 106%, var(--wash-3), transparent 62%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: "Nunito Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 { margin: 0; text-wrap: balance; }
+  .baloo { font-family: "Baloo 2", "Nunito Sans", sans-serif; font-weight: 800; }
+
+  .shell { max-width: 1200px; margin-inline: auto; display: grid; gap: 22px; }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--edge);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    -webkit-backdrop-filter: blur(16px) saturate(1.25);
+    backdrop-filter: blur(16px) saturate(1.25);
+  }
+
+  .eyebrow {
+    font-family: "DM Mono", ui-monospace, monospace;
+    font-size: 10.5px; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--muted); margin: 0;
+  }
+  .num { font-family: "DM Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+  /* ============ cabeçalho ============ */
+  .masthead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 26px; }
+  .masthead h1 { font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: clamp(30px, 4.6vw, 44px); line-height: 1.02; letter-spacing: -.01em; }
+  .masthead p.lede { margin: 4px 0 0; color: var(--ink-soft); max-width: 50ch; font-size: 14.5px; }
+
+  .student { display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 14px; border: 1px solid var(--hairline); border-radius: 999px; background: var(--surface-2); }
+  .student .who { display: grid; line-height: 1.25; }
+  .student .who b { font-size: 14px; font-weight: 800; }
+  .student .who span { font-size: 11.5px; color: var(--muted); }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: #05201C; font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 15px; }
+
+  /* ============ layout de duas colunas, cápsula fixa ============ */
+  .board { display: grid; grid-template-columns: 404px minmax(0, 1fr); gap: 22px; align-items: start; }
+  .capsule-col { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 14px); }
+  .stack { display: grid; gap: 22px; min-width: 0; }
+
+  /* ============ cápsula do xodó ============ */
+  .capsule { overflow: hidden; box-shadow: var(--shadow-lift); }
+
+  .habitat {
+    position: relative;
+    background: radial-gradient(120% 100% at 50% 18%, var(--hab-1), var(--hab-2) 78%);
+    border-bottom: 1px solid var(--hab-edge);
+  }
+  .habitat canvas { display: block; width: 100%; height: 304px; max-width: 100%; cursor: pointer; }
+  .habitat .tag { position: absolute; left: 18px; top: 16px; display: flex; align-items: center; gap: 8px; color: var(--hab-mute); }
+  .habitat .tag .eyebrow { color: inherit; }
+  .habitat .spark { width: 7px; height: 7px; border-radius: 50%; background: var(--body-live); box-shadow: 0 0 10px 2px var(--glow-live); }
+
+  .nameplate { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px 12px; }
+  .nameplate .who { display: grid; gap: 1px; }
+  .nameplate .pet { font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 26px; line-height: 1.05; }
+  .nameplate .stage { font-size: 12.5px; color: var(--muted); }
+
+  .mood {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: "Baloo 2", sans-serif; font-weight: 600; font-size: 14px;
+    padding: 5px 13px 4px; border-radius: 999px;
+    background: var(--k-soft); color: var(--k);
+    transition: background-color .5s ease, color .5s ease;
+  }
+  .mood .d { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+  .care { padding: 4px 20px 6px; display: grid; gap: 13px; }
+  .meter { display: grid; gap: 6px; }
+  .meter-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .meter-head .lab { font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+  .meter-head .val { font-family: "DM Mono", monospace; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .track { height: 7px; border-radius: 99px; background: var(--accent-soft); overflow: hidden; }
+  .fill { height: 100%; border-radius: 99px; transition: width .75s cubic-bezier(.22,.9,.3,1), background-color .6s ease; }
+
+  .xp-block { padding: 10px 20px 0; display: grid; gap: 6px; border-top: 1px solid var(--hairline-2); margin-top: 8px; }
+  .xp-block .track { height: 9px; }
+  .xp-block .fill { background: linear-gradient(90deg, var(--accent), var(--body-live)); }
+  .xp-foot { font-size: 11.5px; color: var(--muted); }
+
+  .capsule-foot { padding: 14px 20px 18px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* ============ botões ============ */
+  button {
+    font: inherit; cursor: pointer;
+    border-radius: 11px; padding: 7px 14px;
+    border: 1px solid var(--hairline);
+    background: var(--surface-2); color: var(--ink-soft);
+    font-size: 12.5px; font-weight: 700;
+    transition: transform .14s ease, background-color .2s, border-color .2s, color .2s;
+  }
+  button:hover { transform: translateY(-1px); border-color: var(--accent); color: var(--accent); }
+  button:active { transform: translateY(0) scale(.98); }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #04211D; }
+  button.primary:hover { color: #04211D; filter: brightness(1.1); }
+  button.warn:hover { border-color: var(--warn); color: var(--warn); }
+  button.danger:hover { border-color: var(--crit); color: var(--crit); }
+
+  /* ============ cabeçalho de painel ============ */
+  .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 17px 22px 13px; }
+  .panel-head h2 { font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -.005em; }
+  .panel-head .hint { font-size: 12px; color: var(--muted); }
+  .counts { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .chip { font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: .09em; text-transform: uppercase; padding: 5px 9px; border-radius: 8px; white-space: nowrap; font-weight: 500; }
+  .chip[data-status="concluido"]  { background: var(--chip-good); color: var(--good); }
+  .chip[data-status="ativo"]      { background: var(--accent-soft); color: var(--accent); }
+  .chip[data-status="atrasado"]   { background: var(--chip-warn); color: var(--warn); }
+  .chip[data-status="abandonado"] { background: var(--chip-idle); color: var(--idle); }
+
+  /* ============ lista de projetos ============ */
+  .ledger { display: grid; }
+  .row {
+    display: grid; gap: 11px;
+    padding: 15px 22px 17px 17px;
+    border-top: 1px solid var(--hairline-2);
+    border-left: 3px solid var(--st);
+    transition: background-color .3s ease, border-color .5s ease;
+  }
+  .row[data-status="concluido"]  { --st: var(--good); }
+  .row[data-status="ativo"]      { --st: var(--accent); }
+  .row[data-status="atrasado"]   { --st: var(--warn); }
+  .row[data-status="abandonado"] { --st: var(--idle); }
+  .row[data-status="abandonado"] .r-title { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+  .row:hover { background: var(--accent-soft); }
+
+  .r-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .r-title { font-size: 15.5px; font-weight: 800; line-height: 1.3; margin: 0 0 3px; }
+  .r-meta { margin: 0; font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 3px 9px; }
+  .r-meta .sep { opacity: .4; }
+
+  .r-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink-soft); border: 1px solid var(--hairline); border-radius: 99px; padding: 2px 10px 2px 7px; }
+  .tag .o { width: 7px; height: 7px; border-radius: 50%; background: var(--o); opacity: .35; }
+  .tag.won { border-color: transparent; background: var(--chip-good); color: var(--good); font-weight: 700; }
+  .tag.won .o { opacity: 1; box-shadow: 0 0 7px 1px var(--o); }
+
+  .r-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ledger-foot { padding: 13px 22px 17px; border-top: 1px solid var(--hairline-2); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .ledger-foot .note { font-size: 12px; color: var(--muted); }
+
+  /* ============ soft skills ============ */
+  .grove { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--hairline-2); border-top: 1px solid var(--hairline-2); }
+  .skill { background: var(--surface-2); padding: 14px 14px 13px; display: grid; gap: 8px; align-content: start; transition: background-color .4s ease; }
+  .skill .ico { width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; background: var(--chip-idle); color: var(--muted); transition: background-color .5s, color .5s, box-shadow .5s; }
+  .skill .ico svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .skill b { font-size: 13px; font-weight: 800; line-height: 1.25; color: var(--muted); transition: color .5s ease; }
+  .skill .prog { display: flex; align-items: center; gap: 7px; }
+  .skill .prog .track { flex: 1; height: 5px; }
+  .skill .fill { background: var(--idle); }
+  .skill .n { font-family: "DM Mono", monospace; font-size: 10.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .skill.unlocked { background: color-mix(in srgb, var(--accent-soft) 55%, var(--surface-2)); }
+  .skill.unlocked .ico { background: color-mix(in srgb, var(--o) 22%, transparent); color: var(--o); box-shadow: 0 0 0 1px color-mix(in srgb, var(--o) 35%, transparent); }
+  .skill.unlocked b { color: var(--ink); }
+  .skill.unlocked .fill { background: var(--o); }
+  .skill.unlocked .n { color: var(--ink-soft); }
+
+  @keyframes pop {
+    0%   { transform: scale(.7) rotate(-14deg); opacity: .3; }
+    58%  { transform: scale(1.18) rotate(6deg); }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  @keyframes halo { from { box-shadow: 0 0 0 0 var(--o); } to { box-shadow: 0 0 0 15px transparent; } }
+  .skill.pop .ico { animation: pop .7s cubic-bezier(.2,.9,.3,1.3) both, halo .85s ease-out .08s both; }
+
+  /* ============ registro ============ */
+  .log { display: grid; max-height: 236px; overflow-y: auto; }
+  .log-item { display: grid; grid-template-columns: 50px minmax(0, 1fr); gap: 12px; padding: 9px 22px; border-top: 1px solid var(--hairline-2); font-size: 13px; color: var(--ink-soft); }
+  .log-item time { font-family: "DM Mono", monospace; font-size: 11px; color: var(--muted); padding-top: 2px; }
+  .log-item .d { color: var(--k); font-weight: 800; }
+  .log-empty { padding: 15px 22px 19px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--hairline-2); }
+
+  /* ============ avisos ============ */
+  .toasts { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 8px; z-index: 40; width: min(400px, calc(100vw - 32px)); }
+  .toast { display: flex; align-items: center; gap: 10px; padding: 11px 15px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--edge); box-shadow: var(--shadow-lift); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); font-size: 13.5px; color: var(--ink); animation: rise .4s cubic-bezier(.2,.9,.3,1.1) both; }
+  .toast .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--k); flex: none; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ============ responsivo ============ */
+  @media (max-width: 1040px) {
+    .board { grid-template-columns: minmax(0, 1fr); }
+    .capsule-col { position: static; }
+    .habitat canvas { height: 300px; }
+  }
+  @media (max-width: 620px) {
+    body { padding-inline: 16px; }
+    .grove { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .r-top { flex-direction: column; }
+  }
+  @media (max-width: 400px) {
+    .grove { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+</style>
+
+<div class="shell">
+
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">Extensão universitária &middot; Soft skills</p>
+      <h1>Xodó de Extensão</h1>
+      <p class="lede">Você não preenche um relatório: você cuida de um bichinho. Entregue os projetos e ele cresce, pula e ganha luzinhas. Deixe atrasar e ele murcha.</p>
+    </div>
+    <div class="student">
+      <div class="avatar" aria-hidden="true">VG</div>
+      <div class="who">
+        <b>Victor Gonçalves</b>
+        <span>Eng. de Computação &middot; 5º semestre</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="board">
+
+    <div class="capsule-col">
+      <section class="panel capsule">
+        <div class="habitat">
+          <div class="tag">
+            <span class="spark" aria-hidden="true"></span>
+            <p class="eyebrow">Cápsula do Xodó</p>
+          </div>
+          <canvas id="pet" title="Faça carinho no Xodó"></canvas>
+        </div>
+
+        <div class="nameplate">
+          <div class="who">
+            <span class="pet">Xodó</span>
+            <span class="stage" id="stage">Curioso &middot; nível 3 de 6</span>
+          </div>
+          <span class="mood" id="mood"><span class="d"></span><span id="moodTxt">Animado</span></span>
+        </div>
+
+        <div class="care">
+          <div class="meter">
+            <div class="meter-head"><span class="lab">Ânimo</span><span class="val" id="vAnimo">80%</span></div>
+            <div class="track"><div class="fill" id="fAnimo" style="width:80%"></div></div>
+          </div>
+          <div class="meter">
+            <div class="meter-head"><span class="lab">Energia</span><span class="val" id="vEnergia">83%</span></div>
+            <div class="track"><div class="fill" id="fEnergia" style="width:83%"></div></div>
+          </div>
+          <div class="meter">
+            <div class="meter-head"><span class="lab">Vínculo</span><span class="val" id="vVinculo">17%</span></div>
+            <div class="track"><div class="fill" id="fVinculo" style="width:17%"></div></div>
+          </div>
+        </div>
+
+        <div class="xp-block">
+          <div class="meter-head"><span class="lab">Crescimento</span><span class="val" id="vXp">320 XP</span></div>
+          <div class="track"><div class="fill" id="fXp" style="width:30%"></div></div>
+          <p class="xp-foot" id="xpFoot">130 XP para virar Crescido</p>
+        </div>
+
+        <div class="capsule-foot">
+          <button type="button" id="pet-btn">Fazer carinho</button>
+          <button type="button" id="reset">Recomeçar o semestre</button>
+        </div>
+
+        <p class="sr" id="summary" role="status" aria-live="polite"></p>
+      </section>
+    </div>
+
+    <div class="stack">
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Projetos de extensão</h2>
+          <div class="counts" id="counts"></div>
+        </div>
+        <div class="ledger" id="ledger"></div>
+        <div class="ledger-foot">
+          <span class="note" id="hoursNote">64 h de 210 h registradas</span>
+          <span class="note">O Xodó reage na hora a cada ação.</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Soft skills</h2>
+          <span class="hint num" id="skillCount">1 / 6 &middot; cada uma vira uma luz orbitando</span>
+        </div>
+        <div class="grove" id="grove"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Diário de cuidados</h2>
+          <span class="hint">O que aconteceu com o Xodó</span>
+        </div>
+        <div class="log" id="log"></div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* =====================================================
+     Dados simulados
+     ===================================================== */
+
+  const SKILLS = [
+    { id: "comunicacao", nome: "Comunicação",            req: 2, cor: "#5BC8F5", icon: "M21 12a8 8 0 0 1-8 8H7l-4 3v-6.7A8 8 0 0 1 11 4h2a8 8 0 0 1 8 8z" },
+    { id: "lideranca",   nome: "Liderança",              req: 2, cor: "#F3C16B", icon: "M12 3.2l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 8.9l5.4-.8z" },
+    { id: "equipe",      nome: "Trabalho em equipe",     req: 2, cor: "#8CC96A", icon: "M9 11a2.6 2.6 0 1 0 0-5.2A2.6 2.6 0 0 0 9 11zM16.4 11.6a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4zM3.5 19c0-3 2.5-4.7 5.5-4.7s5.5 1.7 5.5 4.7M16 14.6c2.6.2 4.5 1.7 4.5 4.4" },
+    { id: "problemas",   nome: "Resolução de problemas", req: 2, cor: "#C78BF0", icon: "M9.5 18.2h5M10.5 21h3M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 1.9h5c.1-.7.5-1.4 1.1-1.9A6 6 0 0 0 12 3z" },
+    { id: "empatia",     nome: "Empatia",                req: 2, cor: "#FF8F9E", icon: "M12 20.3s-7.2-4.4-7.2-9.3a4.1 4.1 0 0 1 7.2-2.7 4.1 4.1 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z" },
+    { id: "tempo",       nome: "Gestão do tempo",        req: 2, cor: "#4ED6BA", icon: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7.2V12l3.2 2" }
+  ];
+
+  const PROJETOS = [
+    { id: "p1", titulo: "Mutirão Digital na Comunidade do Cabula",     area: "Inclusão digital",      horas: 40, prazo: "12 abr", status: "concluido", skills: ["comunicacao", "empatia"] },
+    { id: "p2", titulo: "Robótica Educacional na E.M. Rio Vermelho",   area: "Educação básica",       horas: 60, prazo: "30 mai", status: "ativo",     skills: ["lideranca", "equipe", "problemas"] },
+    { id: "p3", titulo: "Consultoria Jr. para MEIs do Subúrbio",       area: "Empreendedorismo",      horas: 30, prazo: "18 mai", status: "ativo",     skills: ["comunicacao", "problemas", "tempo"] },
+    { id: "p4", titulo: "Horta Urbana Agroecológica do Bairro da Paz", area: "Sustentabilidade",      horas: 24, prazo: "05 abr", status: "concluido", skills: ["equipe", "empatia"] },
+    { id: "p5", titulo: "Feira de Ciências Itinerante SENAI",          area: "Divulgação científica", horas: 36, prazo: "22 abr", status: "atrasado",  skills: ["lideranca", "comunicacao"] },
+    { id: "p6", titulo: "Plantão de Suporte Técnico Solidário",        area: "Tecnologia social",     horas: 20, prazo: "14 jun", status: "ativo",     skills: ["problemas", "tempo"] }
+  ];
+
+  const ESTAGIOS = [
+    { min: 0,   nome: "Ovo" },
+    { min: 120, nome: "Filhote" },
+    { min: 280, nome: "Curioso" },
+    { min: 450, nome: "Crescido" },
+    { min: 700, nome: "Parceiro" },
+    { min: 950, nome: "Lendário" }
+  ];
+
+  const XP_POR_HORA = 5;
+  const TOTAL_HORAS = PROJETOS.reduce((s, p) => s + p.horas, 0);
+  const XP_MAX = TOTAL_HORAS * XP_POR_HORA;
+  const ROTULO = { concluido: "Concluído", ativo: "Em andamento", atrasado: "Atrasado", abandonado: "Abandonado" };
+
+  const inicial = PROJETOS.map(p => p.status);
+  let projetos = PROJETOS.map(p => ({ ...p }));
+  let registro = [];
+
+  function derivar() {
+    const done = projetos.filter(p => p.status === "concluido");
+    const late = projetos.filter(p => p.status === "atrasado").length;
+    const drop = projetos.filter(p => p.status === "abandonado").length;
+    const horas = done.reduce((s, p) => s + p.horas, 0);
+    const xp = horas * XP_POR_HORA;
+
+    let estagio = 0;
+    for (let i = 0; i < ESTAGIOS.length; i++) if (xp >= ESTAGIOS[i].min) estagio = i;
+
+    const animo = Math.max(6, Math.min(100, 88 - late * 16 - drop * 28 + done.length * 4));
+    const energia = Math.round(100 * (projetos.length - late - drop) / projetos.length);
+
+    const skills = SKILLS.map(s => {
+      const feitos = done.filter(p => p.skills.includes(s.id)).length;
+      return { ...s, feitos: Math.min(feitos, s.req), ok: feitos >= s.req };
+    });
+    const ok = skills.filter(s => s.ok);
+    const vinculo = Math.round(100 * ok.length / SKILLS.length);
+
+    return {
+      done: done.length, late, drop, horas, xp, estagio,
+      animo, energia, vinculo, skills, ativas: ok,
+      humor: (animo * 0.62 + energia * 0.38) / 100
+    };
+  }
+
+  /* =====================================================
+     Canvas — o Xodó
+     ===================================================== */
+
+  const cv = document.getElementById("pet");
+  const ctx = cv.getContext("2d");
+  const reduz = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  let W = 0, H = 0, pal = null;
+
+  function tok(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim() || "#888"; }
+  function rgbOf(hex) {
+    let h = hex.replace("#", "");
+    if (h.length === 3) h = h.split("").map(c => c + c).join("");
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  }
+  function mix(a, b, t) {
+    const A = rgbOf(a), B = rgbOf(b);
+    return "rgb(" + Math.round(A[0] + (B[0] - A[0]) * t) + "," + Math.round(A[1] + (B[1] - A[1]) * t) + "," + Math.round(A[2] + (B[2] - A[2]) * t) + ")";
+  }
+  function rgba(hex, a) { const c = rgbOf(hex); return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")"; }
+
+  function lerPaleta() {
+    pal = {
+      bodyLive: tok("--body-live"), bodyDim: tok("--body-dim"),
+      bellyLive: tok("--belly-live"), bellyDim: tok("--belly-dim"),
+      face: tok("--face"),
+      glowLive: tok("--glow-live"), glowDim: tok("--glow-dim"),
+      hab1: tok("--hab-1"), hab2: tok("--hab-2")
+    };
+  }
+
+  function dimensionar() {
+    const r = cv.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = Math.max(1, Math.round(r.width));
+    H = Math.max(1, Math.round(r.height));
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  // estado animado
+  const A = { m: 0.8, s: 0.3, orbs: [] };   // humor, tamanho, luzes
+  let alvo = { m: 0.8, s: 0.3 };
+  let hopV = 0, hopY = 0, tremor = 0, olhar = { x: 0, y: 0, tx: 0, ty: 0, prox: 0 };
+  let piscar = { t: 2000, aberto: 1 };
+  const parts = [];
+  const motes = [];
+
+  for (let i = 0; i < 16; i++) {
+    motes.push({ x: Math.random(), y: Math.random(), v: 0.04 + Math.random() * 0.09, r: 0.7 + Math.random() * 1.4, f: Math.random() * 6.28 });
+  }
+
+  function emitir(n, cor, modo) {
+    for (let i = 0; i < n; i++) {
+      parts.push({
+        x: W * 0.5 + (Math.random() - 0.5) * 70,
+        y: H * 0.56 + (Math.random() - 0.5) * 40,
+        vx: (Math.random() - 0.5) * 1.1,
+        vy: modo === "cair" ? 0.3 + Math.random() * 0.5 : -(0.7 + Math.random() * 1.1),
+        r: 1.4 + Math.random() * 2.2,
+        cor: cor, vida: 1
+      });
+    }
+  }
+
+  function hop(forca) { if (!reduz.matches) hopV = -forca; }
+  function sacudir(f) { if (!reduz.matches) tremor = f; }
+
+  function desenharOvo(cx, cy, r, prog, t) {
+    const wob = reduz.matches ? 0 : Math.sin(t * 0.004) * 0.05 * (0.3 + prog);
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(wob);
+    const rx = r * 0.72, ry = r;
+    ctx.beginPath();
+    ctx.moveTo(0, -ry);
+    ctx.bezierCurveTo(rx * 0.95, -ry * 0.92, rx * 1.05, ry * 0.32, 0, ry);
+    ctx.bezierCurveTo(-rx * 1.05, ry * 0.32, -rx * 0.95, -ry * 0.92, 0, -ry);
+    const g = ctx.createLinearGradient(0, -ry, 0, ry);
+    g.addColorStop(0, "#FBF3E2");
+    g.addColorStop(1, "#DCCFB4");
+    ctx.fillStyle = g;
+    ctx.fill();
+
+    // rachadura que abre conforme o XP se aproxima da eclosão
+    const pts = [[-rx * 0.9, -ry * 0.06], [-rx * 0.45, ry * 0.12], [-rx * 0.1, -ry * 0.1], [rx * 0.3, ry * 0.1], [rx * 0.7, -ry * 0.08], [rx * 0.92, ry * 0.04]];
+    const n = Math.max(1, Math.round(pts.length * Math.min(1, prog + 0.12)));
+    ctx.strokeStyle = "rgba(60,45,30,.55)";
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < n; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function desenhar(t) {
+    if (!pal) lerPaleta();
+    const m = A.m, s = A.s, seco = 1 - m;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // poeira luminosa do habitat
+    if (!reduz.matches) {
+      for (const p of motes) {
+        p.y -= p.v / H * 60 * 0.016;
+        if (p.y < -0.05) { p.y = 1.05; p.x = Math.random(); }
+        const a = (0.10 + m * 0.30) * (0.5 + 0.5 * Math.sin(t * 0.001 + p.f));
+        ctx.fillStyle = rgba(pal.bodyLive, a);
+        ctx.beginPath();
+        ctx.arc(p.x * W + Math.sin(t * 0.0006 + p.f) * 8, p.y * H, p.r, 0, 6.2832);
+        ctx.fill();
+      }
+    }
+
+    // física do pulo
+    if (!reduz.matches) {
+      hopV += 0.42;
+      hopY = Math.min(0, hopY + hopV);
+      if (hopY === 0) hopV = 0;
+      tremor *= 0.90;
+      if (tremor < 0.05) tremor = 0;
+    } else { hopY = 0; tremor = 0; }
+
+    const shake = tremor ? Math.sin(t * 0.06) * tremor : 0;
+    const base = H * 0.72;
+    const r = (30 + 30 * s) * Math.min(1, W / 380);
+    const cx = W * 0.5 + shake;
+    const cy = base - r * 0.9 + hopY;
+
+    const respira = reduz.matches ? 0 : Math.sin(t * 0.0024) * 0.035 * (0.45 + m);
+    const esticar = hopY / 26;
+    const sx = 1 + respira * 0.7 - esticar * 0.35;
+    const sy = 1 - respira * 0.7 + esticar * 0.35;
+
+    // sombra no chão
+    ctx.fillStyle = "rgba(0,0,0,.28)";
+    ctx.beginPath();
+    ctx.ellipse(W * 0.5, base + r * 0.16, r * (0.78 + hopY / 90), r * 0.17, 0, 0, 6.2832);
+    ctx.fill();
+
+    // ovo: estágio inicial, sem bichinho ainda
+    if (s < 0.115) {
+      desenharOvo(cx, cy, r * 1.05, s / 0.115, t);
+      desenharParticulas();
+      return;
+    }
+
+    // brilho
+    const gl = ctx.createRadialGradient(cx, cy, r * 0.2, cx, cy, r * 2.5);
+    gl.addColorStop(0, m > 0.4 ? pal.glowLive : pal.glowDim);
+    gl.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.globalAlpha = 0.35 + m * 0.6;
+    ctx.fillStyle = gl;
+    ctx.fillRect(0, 0, W, H);
+    ctx.globalAlpha = 1;
+
+    const corpo = mix(pal.bodyDim, pal.bodyLive, Math.pow(m, 0.75));
+    const barriga = mix(pal.bellyDim, pal.bellyLive, Math.pow(m, 0.75));
+
+    // luzes das soft skills — atrás quando passam por trás
+    const orbs = A.orbs;
+    function orbe(i, atras) {
+      const o = orbs[i];
+      const ang = (reduz.matches ? 0 : t * 0.00055) + i * (6.2832 / Math.max(1, orbs.length));
+      const oy = Math.sin(ang);
+      if ((oy < 0) !== atras) return;
+      const ox = cx + Math.cos(ang) * r * 1.85;
+      const py = cy + oy * r * 0.52 - r * 0.15;
+      const esc = (0.78 + oy * 0.22) * o.pop;
+      const gg = ctx.createRadialGradient(ox, py, 0, ox, py, 13 * esc);
+      gg.addColorStop(0, rgba(o.cor, 0.85));
+      gg.addColorStop(1, rgba(o.cor, 0));
+      ctx.fillStyle = gg;
+      ctx.beginPath(); ctx.arc(ox, py, 13 * esc, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = o.cor;
+      ctx.beginPath(); ctx.arc(ox, py, 3.1 * esc, 0, 6.2832); ctx.fill();
+    }
+    for (let i = 0; i < orbs.length; i++) { orbs[i].pop += (1 - orbs[i].pop) * 0.12; orbe(i, true); }
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(sx, sy);
+
+    // antenas — caem junto com o ânimo
+    const cair = (1 - m) * 1.15;
+    ctx.strokeStyle = corpo;
+    ctx.lineWidth = Math.max(2, r * 0.075);
+    ctx.lineCap = "round";
+    for (const lado of [-1, 1]) {
+      const a0 = -Math.PI / 2 + lado * 0.42 + lado * cair;
+      const bal = reduz.matches ? 0 : Math.sin(t * 0.0022 + lado) * 0.06 * m;
+      const ax = Math.cos(a0 + bal) * r * 0.95, ay = Math.sin(a0 + bal) * r * 0.95;
+      ctx.beginPath();
+      ctx.moveTo(lado * r * 0.34, -r * 0.62);
+      ctx.quadraticCurveTo(lado * r * 0.5 + ax * 0.4, -r * 0.62 + ay * 0.55, lado * r * 0.34 + ax * 0.7, -r * 0.62 + ay * 0.85);
+      ctx.stroke();
+      ctx.fillStyle = mix(corpo, barriga, 0.5);
+      ctx.beginPath();
+      ctx.arc(lado * r * 0.34 + ax * 0.7, -r * 0.62 + ay * 0.85, r * 0.10, 0, 6.2832);
+      ctx.fill();
+    }
+
+    // pezinhos
+    ctx.fillStyle = mix(corpo, "#000000", 0.14);
+    for (const lado of [-1, 1]) {
+      ctx.beginPath();
+      ctx.ellipse(lado * r * 0.38, r * 0.86, r * 0.20, r * 0.12, lado * 0.25, 0, 6.2832);
+      ctx.fill();
+    }
+
+    // corpo
+    ctx.fillStyle = corpo;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, r * 0.92, r, 0, 0, 6.2832);
+    ctx.fill();
+
+    // barriga
+    ctx.fillStyle = barriga;
+    ctx.globalAlpha = 0.55;
+    ctx.beginPath();
+    ctx.ellipse(0, r * 0.26, r * 0.58, r * 0.56, 0, 0, 6.2832);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // rosto
+    if (!reduz.matches) {
+      piscar.t -= 16;
+      if (piscar.t < 0) { piscar.t = 2200 + Math.random() * 3200; }
+      piscar.aberto = piscar.t < 130 ? Math.abs(piscar.t - 65) / 65 : 1;
+
+      olhar.prox -= 16;
+      if (olhar.prox < 0) { olhar.prox = 1400 + Math.random() * 2200; olhar.tx = (Math.random() - 0.5) * 1.4; olhar.ty = (Math.random() - 0.5) * 0.9; }
+      olhar.x += (olhar.tx - olhar.x) * 0.07;
+      olhar.y += (olhar.ty - olhar.y) * 0.07;
+    }
+
+    const abert = piscar.aberto * (0.45 + m * 0.55);
+    const olhoY = -r * 0.12;
+    ctx.fillStyle = pal.face;
+    for (const lado of [-1, 1]) {
+      ctx.beginPath();
+      ctx.ellipse(lado * r * 0.32 + olhar.x * r * 0.05, olhoY + olhar.y * r * 0.04, r * 0.115, r * 0.155 * abert, 0, 0, 6.2832);
+      ctx.fill();
+      if (abert > 0.6) {
+        ctx.fillStyle = "rgba(255,255,255,.85)";
+        ctx.beginPath();
+        ctx.arc(lado * r * 0.32 + olhar.x * r * 0.05 + r * 0.04, olhoY + olhar.y * r * 0.04 - r * 0.05, r * 0.035, 0, 6.2832);
+        ctx.fill();
+        ctx.fillStyle = pal.face;
+      }
+    }
+
+    // boca: sorriso vira bico conforme o humor cai
+    const curva = (m - 0.5) * r * 0.30;
+    ctx.strokeStyle = pal.face;
+    ctx.lineWidth = Math.max(1.6, r * 0.05);
+    ctx.beginPath();
+    ctx.moveTo(-r * 0.15, r * 0.22 - curva * 0.3);
+    ctx.quadraticCurveTo(0, r * 0.22 + curva, r * 0.15, r * 0.22 - curva * 0.3);
+    ctx.stroke();
+
+    // bochechas: só quando está bem
+    if (m > 0.62) {
+      ctx.fillStyle = "rgba(255,138,120," + ((m - 0.62) * 1.6).toFixed(2) + ")";
+      for (const lado of [-1, 1]) {
+        ctx.beginPath();
+        ctx.ellipse(lado * r * 0.58, r * 0.16, r * 0.14, r * 0.09, 0, 0, 6.2832);
+        ctx.fill();
+      }
+    }
+
+    ctx.restore();
+
+    for (let i = 0; i < orbs.length; i++) orbe(i, false);
+    desenharParticulas();
+  }
+
+  function desenharParticulas() {
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      p.x += p.vx; p.y += p.vy; p.vy += 0.012; p.vida -= 0.012;
+      if (p.vida <= 0) { parts.splice(i, 1); continue; }
+      ctx.globalAlpha = Math.max(0, p.vida);
+      ctx.fillStyle = p.cor;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  function loop(t) {
+    const k = reduz.matches ? 1 : 0.06;
+    A.m += (alvo.m - A.m) * k;
+    A.s += (alvo.s - A.s) * k;
+    desenhar(t);
+    requestAnimationFrame(loop);
+  }
+
+  /* =====================================================
+     Interface
+     ===================================================== */
+
+  const el = {
+    ledger: document.getElementById("ledger"),
+    grove: document.getElementById("grove"),
+    log: document.getElementById("log"),
+    counts: document.getElementById("counts"),
+    toasts: document.getElementById("toasts"),
+    stage: document.getElementById("stage"),
+    mood: document.getElementById("mood"),
+    moodTxt: document.getElementById("moodTxt"),
+    vAnimo: document.getElementById("vAnimo"), fAnimo: document.getElementById("fAnimo"),
+    vEnergia: document.getElementById("vEnergia"), fEnergia: document.getElementById("fEnergia"),
+    vVinculo: document.getElementById("vVinculo"), fVinculo: document.getElementById("fVinculo"),
+    vXp: document.getElementById("vXp"), fXp: document.getElementById("fXp"),
+    xpFoot: document.getElementById("xpFoot"),
+    skillCount: document.getElementById("skillCount"),
+    hoursNote: document.getElementById("hoursNote"),
+    summary: document.getElementById("summary")
+  };
+
+  const ACOES = {
+    concluido:  [{ t: "Reabrir projeto", a: "ativo", c: "" }],
+    ativo:      [{ t: "Marcar como concluído", a: "concluido", c: "primary" },
+                 { t: "Reportar atraso", a: "atrasado", c: "warn" },
+                 { t: "Abandonar", a: "abandonado", c: "danger" }],
+    atrasado:   [{ t: "Entregar mesmo assim", a: "concluido", c: "primary" },
+                 { t: "Voltar ao ritmo", a: "ativo", c: "" },
+                 { t: "Abandonar", a: "abandonado", c: "danger" }],
+    abandonado: [{ t: "Retomar projeto", a: "ativo", c: "" }]
+  };
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+  function skill(id) { return SKILLS.find(x => x.id === id); }
+
+  function humorNome(h) {
+    if (h >= 0.85) return { n: "Radiante", k: "var(--good)", s: "var(--chip-good)" };
+    if (h >= 0.68) return { n: "Animado", k: "var(--accent)", s: "var(--accent-soft)" };
+    if (h >= 0.48) return { n: "Sonolento", k: "var(--warn)", s: "var(--chip-warn)" };
+    if (h >= 0.28) return { n: "Tristinho", k: "var(--crit)", s: "var(--chip-crit)" };
+    return { n: "Apático", k: "var(--idle)", s: "var(--chip-idle)" };
+  }
+  function corBarra(v) { return v >= 70 ? "var(--good)" : v >= 40 ? "var(--warn)" : "var(--crit)"; }
+
+  function renderLedger(d) {
+    el.ledger.innerHTML = projetos.map(p => {
+      const acoes = ACOES[p.status].map(a =>
+        `<button type="button" class="${a.c}" data-p="${p.id}" data-a="${a.a}">${esc(a.t)}</button>`).join("");
+      const tags = p.skills.map(id => {
+        const sk = d.skills.find(x => x.id === id);
+        return `<span class="tag${sk.ok ? " won" : ""}" style="--o:${sk.cor}"><span class="o"></span>${esc(sk.nome)}</span>`;
+      }).join("");
+      return `
+        <article class="row" data-status="${p.status}">
+          <div class="r-top">
+            <div>
+              <h3 class="r-title">${esc(p.titulo)}</h3>
+              <p class="r-meta"><span>${esc(p.area)}</span><span class="sep">/</span><span class="num">${p.horas} h</span><span class="sep">/</span><span>entrega ${esc(p.prazo)}</span></p>
+            </div>
+            <span class="chip" data-status="${p.status}">${ROTULO[p.status]}</span>
+          </div>
+          <div class="r-tags">${tags}</div>
+          <div class="r-actions">${acoes}</div>
+        </article>`;
+    }).join("");
+  }
+
+  function renderSkills(d, novas) {
+    el.grove.innerHTML = d.skills.map(s => `
+      <div class="skill${s.ok ? " unlocked" : ""}${novas.has(s.id) ? " pop" : ""}" style="--o:${s.cor}">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${s.icon}"/></svg></span>
+        <b>${esc(s.nome)}</b>
+        <div class="prog">
+          <div class="track"><div class="fill" style="width:${(s.feitos / s.req) * 100}%"></div></div>
+          <span class="n">${s.feitos}/${s.req}</span>
+        </div>
+      </div>`).join("");
+    el.skillCount.textContent = d.ativas.length + " / " + SKILLS.length + " · cada uma vira uma luz orbitando";
+  }
+
+  function renderLog() {
+    if (!registro.length) {
+      el.log.innerHTML = `<p class="log-empty">Nada aconteceu ainda. Mexa nos projetos e o Xodó responde aqui.</p>`;
+      return;
+    }
+    el.log.innerHTML = registro.slice(0, 12).map(r => `
+      <div class="log-item">
+        <time>${r.hora}</time>
+        <span><b class="d" style="--k:${r.cor}">${esc(r.verbo)}</b> ${esc(r.texto)}</span>
+      </div>`).join("");
+  }
+
+  function render(novas) {
+    novas = novas || new Set();
+    const d = derivar();
+
+    alvo.m = d.humor;
+    alvo.s = Math.min(1, d.xp / XP_MAX);
+
+    // luzes orbitando = soft skills desbloqueadas
+    const antesIds = A.orbs.map(o => o.id);
+    A.orbs = d.ativas.map(s => {
+      const velha = A.orbs.find(o => o.id === s.id);
+      return { id: s.id, cor: s.cor, pop: velha ? velha.pop : 0.2 };
+    });
+
+    const est = ESTAGIOS[d.estagio], prox = ESTAGIOS[d.estagio + 1];
+    el.stage.innerHTML = esc(est.nome) + " &middot; nível " + (d.estagio + 1) + " de " + ESTAGIOS.length;
+
+    const h = humorNome(d.humor);
+    el.moodTxt.textContent = h.n;
+    el.mood.style.setProperty("--k", h.k);
+    el.mood.style.setProperty("--k-soft", h.s);
+
+    el.vAnimo.textContent = d.animo + "%";
+    el.fAnimo.style.width = d.animo + "%";
+    el.fAnimo.style.background = corBarra(d.animo);
+    el.vEnergia.textContent = d.energia + "%";
+    el.fEnergia.style.width = d.energia + "%";
+    el.fEnergia.style.background = corBarra(d.energia);
+    el.vVinculo.textContent = d.vinculo + "%";
+    el.fVinculo.style.width = d.vinculo + "%";
+    el.fVinculo.style.background = d.vinculo >= 50 ? "var(--good)" : "var(--accent)";
+
+    el.vXp.textContent = d.xp + " XP";
+    el.fXp.style.width = Math.min(100, (d.xp / XP_MAX) * 100) + "%";
+    el.xpFoot.textContent = prox ? (prox.min - d.xp) + " XP para virar " + prox.nome : "Xodó lendário — cresceu tudo o que dava.";
+
+    el.counts.innerHTML =
+      `<span class="chip" data-status="concluido">${d.done} concluídos</span>` +
+      `<span class="chip" data-status="ativo">${projetos.length - d.done - d.late - d.drop} ativos</span>` +
+      (d.late ? `<span class="chip" data-status="atrasado">${d.late} atrasado${d.late > 1 ? "s" : ""}</span>` : "") +
+      (d.drop ? `<span class="chip" data-status="abandonado">${d.drop} abandonado${d.drop > 1 ? "s" : ""}</span>` : "");
+
+    el.hoursNote.textContent = d.horas + " h de " + TOTAL_HORAS + " h registradas";
+    el.summary.textContent = "Xodó no estágio " + est.nome + ", humor " + h.n + ", ânimo " + d.animo +
+      "%, energia " + d.energia + "%, " + d.ativas.length + " de " + SKILLS.length + " soft skills desbloqueadas.";
+
+    renderLedger(d);
+    renderSkills(d, novas);
+    renderLog();
+    return d;
+  }
+
+  /* =====================================================
+     Interação
+     ===================================================== */
+
+  function agora() {
+    const t = new Date();
+    return String(t.getHours()).padStart(2, "0") + ":" + String(t.getMinutes()).padStart(2, "0");
+  }
+
+  function aviso(texto, cor) {
+    const n = document.createElement("div");
+    n.className = "toast";
+    n.style.setProperty("--k", cor);
+    n.innerHTML = `<span class="dot"></span><span>${esc(texto)}</span>`;
+    el.toasts.appendChild(n);
+    setTimeout(() => {
+      n.style.transition = "opacity .35s ease, transform .35s ease";
+      n.style.opacity = "0"; n.style.transform = "translateY(8px)";
+      setTimeout(() => n.remove(), 400);
+    }, 3200);
+  }
+
+  const VERBO = {
+    concluido:  { v: "Entregue",   cor: "var(--good)" },
+    ativo:      { v: "Retomado",   cor: "var(--accent)" },
+    atrasado:   { v: "Atrasou",    cor: "var(--warn)" },
+    abandonado: { v: "Abandonado", cor: "var(--crit)" }
+  };
+
+  function aplicar(idProjeto, novoStatus) {
+    const p = projetos.find(x => x.id === idProjeto);
+    if (!p || p.status === novoStatus) return;
+
+    const antes = new Set(derivar().ativas.map(s => s.id));
+    p.status = novoStatus;
+    const d = derivar();
+    const depois = new Set(d.ativas.map(s => s.id));
+    const novas = new Set([...depois].filter(x => !antes.has(x)));
+    const perdidas = [...antes].filter(x => !depois.has(x));
+
+    const info = VERBO[novoStatus];
+    registro.unshift({ hora: agora(), verbo: info.v, texto: p.titulo, cor: info.cor });
+
+    render(novas);
+
+    if (novoStatus === "concluido") {
+      hop(6.4); emitir(16, pal ? pal.bodyLive : "#F3C16B", "subir");
+      aviso("O Xodó deu um pulo! +" + (p.horas * XP_POR_HORA) + " XP", "var(--good)");
+    } else if (novoStatus === "atrasado") {
+      emitir(9, "#9aa8a8", "cair");
+      aviso("As antenas caíram um pouco. Atraso registrado.", "var(--warn)");
+    } else if (novoStatus === "abandonado") {
+      sacudir(7); emitir(14, "#8e9a9a", "cair");
+      aviso("O Xodó encolheu. Projeto abandonado.", "var(--crit)");
+    } else {
+      hop(3.4);
+      aviso("Projeto de volta ao ritmo.", "var(--accent)");
+    }
+
+    novas.forEach(id => {
+      const s = skill(id);
+      registro.unshift({ hora: agora(), verbo: "Nova luz", texto: "Soft skill " + s.nome, cor: s.cor });
+      emitir(10, s.cor, "subir");
+      setTimeout(() => aviso("Nova luz orbitando: " + s.nome, s.cor), 240);
+    });
+    perdidas.forEach(id => {
+      const s = skill(id);
+      registro.unshift({ hora: agora(), verbo: "Luz apagou", texto: "Soft skill " + s.nome, cor: "var(--crit)" });
+    });
+    if (novas.size || perdidas.length) renderLog();
+
+    setTimeout(() => el.grove.querySelectorAll(".pop").forEach(n => n.classList.remove("pop")), 850);
+  }
+
+  el.ledger.addEventListener("click", function (e) {
+    const b = e.target.closest("button[data-p]");
+    if (b) aplicar(b.dataset.p, b.dataset.a);
+  });
+
+  function carinho() {
+    hop(4.6);
+    emitir(9, pal ? pal.bodyLive : "#F3C16B", "subir");
+  }
+  cv.addEventListener("click", carinho);
+  document.getElementById("pet-btn").addEventListener("click", carinho);
+
+  document.getElementById("reset").addEventListener("click", function () {
+    projetos = PROJETOS.map((p, i) => ({ ...p, status: inicial[i] }));
+    registro = [];
+    parts.length = 0;
+    render();
+    aviso("Semestre recomeçado.", "var(--accent)");
+  });
+
+  /* =====================================================
+     Boot
+     ===================================================== */
+
+  function start(saved) {
+    if (saved && Array.isArray(saved.status) && saved.status.length === projetos.length) {
+      projetos.forEach((p, i) => { if (ROTULO[saved.status[i]]) p.status = saved.status[i]; });
+      registro = Array.isArray(saved.registro) ? saved.registro : [];
+    }
+    lerPaleta();
+    dimensionar();
+    render();
+    A.m = alvo.m;
+    A.s = alvo.s * 0.55;
+    requestAnimationFrame(loop);
+  }
+
+  new ResizeObserver(dimensionar).observe(cv.parentElement);
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", lerPaleta);
+  new MutationObserver(lerPaleta).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  const hot = window.claude && window.claude.hot;
+  if (hot) hot.snapshot(() => ({ status: projetos.map(p => p.status), registro: registro }));
+  if (hot && hot.ready) hot.ready(start); else start(hot ? hot.data : null);
+})();
+</script>
