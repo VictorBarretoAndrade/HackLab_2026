@@ -22,17 +22,35 @@ export function token(nome) {
   return v || '#888888'
 }
 
-function canal(hex) {
-  let h = String(hex).replace('#', '')
+/**
+ * Converte uma cor em [r, g, b].
+ *
+ * Aceita hex (#abc, #aabbcc) E a forma rgb()/rgba(), porque mix() devolve
+ * rgb() e o resultado dele volta para ca em composicoes aninhadas
+ * (mix(mix(a,b), c)). Enquanto isto so lia hex, um mix aninhado produzia
+ * parseInt('rg', 16) = NaN e devolvia "rgb(NaN,NaN,55)". O canvas trata cor
+ * invalida ignorando a atribuicao e MANTENDO o fillStyle anterior — entao as
+ * folhas da copa saiam todas na cor do solo, sem tingimento e sem amarelar.
+ */
+function canal(cor) {
+  const c = String(cor).trim()
+
+  const rgbMatch = c.match(/^rgba?\(([^)]+)\)$/i)
+  if (rgbMatch) {
+    const p = rgbMatch[1].split(',').map((v) => parseFloat(v))
+    return [p[0] || 0, p[1] || 0, p[2] || 0]
+  }
+
+  let h = c.replace('#', '')
   if (h.length === 3)
     h = h
       .split('')
-      .map((c) => c + c)
+      .map((x) => x + x)
       .join('')
-  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]
+  return [parseInt(h.slice(0, 2), 16) || 0, parseInt(h.slice(2, 4), 16) || 0, parseInt(h.slice(4, 6), 16) || 0]
 }
 
-/** Interpolacao linear entre duas cores hex. t = 0 devolve a, t = 1 devolve b. */
+/** Interpolacao linear entre duas cores. t = 0 devolve a, t = 1 devolve b. */
 export function mix(a, b, t) {
   const A = canal(a)
   const B = canal(b)
@@ -47,7 +65,7 @@ export function mix(a, b, t) {
   )
 }
 
-export function rgba(hex, alpha) {
-  const c = canal(hex)
+export function rgba(cor, alpha) {
+  const c = canal(cor)
   return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + alpha + ')'
 }

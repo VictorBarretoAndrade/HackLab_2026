@@ -4,7 +4,7 @@ import { skillPorId } from '../../data/skills.js'
 import { HORAS_EXTENSAO, NIVEIS, n0 } from '../../lib/curriculo.js'
 import { derivar, legendaArvore } from '../../lib/motorAluno.js'
 import { useAvisar } from '../ui/Toasts.jsx'
-import ArvoreCanvas, { COPA_COLORIDA } from './ArvoreCanvas.jsx'
+import ArvoreCanvas from './ArvoreCanvas.jsx'
 import ListaProjetos from './ListaProjetos.jsx'
 import PainelSkills from './PainelSkills.jsx'
 import Registro from './Registro.jsx'
@@ -64,14 +64,7 @@ export default function VisaoAluno() {
 
   const chaveCompetencias = d.ativas.map((s) => s.id).join(',')
   const competencias = useMemo(
-    () =>
-      d.ativas.map((s) => {
-        // Banda fixa da copa que esta competencia tinge, dada pela posicao dela
-        // na lista completa. Estavel: desbloquear outra nao remexe nesta.
-        const ordem = d.skills.findIndex((x) => x.id === s.id)
-        const passo = COPA_COLORIDA / d.skills.length
-        return { id: s.id, cor: s.cor, lo: ordem * passo, hi: (ordem + 1) * passo }
-      }),
+    () => d.ativas.map((s) => ({ id: s.id, cor: s.cor })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [chaveCompetencias],
   )
@@ -186,6 +179,7 @@ export default function VisaoAluno() {
             crescimento={d.crescimento}
             vitalidade={d.vitalidade / 100}
             competencias={competencias}
+            totalCompetencias={d.skills.length}
             descricao={resumo}
           />
           <p className="palco-legenda">{legendaArvore(d)}</p>

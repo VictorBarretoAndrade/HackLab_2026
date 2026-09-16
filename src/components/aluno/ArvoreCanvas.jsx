@@ -12,9 +12,10 @@ import { mix, mulberry32, rgba, token } from '../../lib/cor.js'
  * *saltar* de tamanho.
  *
  * AS COMPETENCIAS TINGEM A COPA. Cada soft skill desbloqueada pinta uma fatia
- * das folhas com a sua cor. Nao existe fruto pulsando nem brilho piscando: a
- * cor entra por interpolacao (~1 s) e depois fica parada. Quanto mais
- * competencias, maior a fatia colorida da copa.
+ * das folhas com a sua cor. Nao existe fruto pulsando nem brilho piscando: ao
+ * ganhar uma competencia a copa faz um cross-fade (~1,5 s) do arranjo antigo
+ * de cores para o novo e depois fica parada. Quanto mais competencias, maior
+ * a fatia colorida.
  */
 
 const SEMENTE = 20260916
@@ -25,6 +26,30 @@ const TRONCO_U = 100 // tronco nominal, em unidades do espaco de geracao
  * desbloqueadas. O resto segue verde — senao a copa vira confete.
  */
 export const COPA_COLORIDA = 0.7
+
+/**
+ * Divide a copa entre as competencias desbloqueadas.
+ *
+ * A fatia total cresce pela RAIZ de quantas ja existem, nao linearmente: com
+ * 1 de 6 a copa mostra ~29% de cor, o suficiente para se enxergar, e com as 6
+ * chega aos 70%. Dividir linearmente daria 11,7% para a primeira — cerca de
+ * sete folhas numa arvore de nivel 3, praticamente invisivel.
+ */
+function bandas(lista, total) {
+  const n = lista.length
+  if (!n || !total) return []
+  const fatia = COPA_COLORIDA * Math.sqrt(n / total)
+  const passo = fatia / n
+  return lista.map((c, i) => ({ cor: c.cor, lo: i * passo, hi: (i + 1) * passo }))
+}
+
+/** Cor da competencia que reivindica esta folha, ou null se ela segue verde. */
+function corDaBanda(bs, sorte) {
+  for (let i = 0; i < bs.length; i++) {
+    if (sorte >= bs[i].lo && sorte < bs[i].hi) return bs[i].cor
+  }
+  return null
+}
 
 /**
  * Gera a arvore em ESPACO UNITARIO e acumula a bounding box.
@@ -59,7 +84,7 @@ function gerar(growth, tempo, vento) {
     marcar(x2, y2)
 
     if (d <= 1 || comp < 6) {
-      const n = 2 + Math.floor(rnd() * 2)
+      const n = 3 + Math.floor(rnd() * 3)
       for (let i = 0; i < n; i++) {
         const lx = x2 + (rnd() - 0.5) * comp * 1.1
         const ly = y2 + (rnd() - 0.5) * comp * 1.1
@@ -101,7 +126,7 @@ function gerar(growth, tempo, vento) {
 }
 
 const ArvoreCanvas = forwardRef(function ArvoreCanvas(
-  { crescimento, vitalidade, competencias, descricao },
+  { crescimento, vitalidade, competencias, totalCompetencias, descricao },
   ref,
 ) {
   const cvRef = useRef(null)
@@ -110,7 +135,13 @@ const ArvoreCanvas = forwardRef(function ArvoreCanvas(
     v: 0.8,
     alvoG: 0.05,
     alvoV: 0.8,
-    competencias: [],
+    // Duas configuracoes de competencia e um cross-fade entre elas. Assim uma
+    // conquista nova nao devolve folhas ao verde antes de assumir a cor: a
+    // copa dissolve direto do arranjo antigo para o novo.
+    antes: [],
+    atual: [],
+    cross: 1,
+    total: 6,
     folhas: 0,
     pulso: 0,
     parts: [],
@@ -134,15 +165,14 @@ const ArvoreCanvas = forwardRef(function ArvoreCanvas(
     }
   }, [crescimento, vitalidade])
 
-  /* ---- competencias, preservando a mistura ja alcancada pelas antigas ---- */
+  /* ---- troca de competencias: guarda o arranjo antigo e reinicia o fade ---- */
   useEffect(() => {
     const s = S.current
-    s.competencias = competencias.map((c) => {
-      const velha = s.competencias.find((o) => o.id === c.id)
-      // m = quanto da cor ja entrou (0..1). As novas entram por interpolacao.
-      return { id: c.id, cor: c.cor, lo: c.lo, hi: c.hi, m: velha ? velha.m : 0 }
-    })
-  }, [competencias])
+    s.antes = s.atual
+    s.atual = competencias.map((c) => ({ id: c.id, cor: c.cor }))
+    s.total = totalCompetencias
+    s.cross = 0
+  }, [competencias, totalCompetencias])
 
   /* ---- acoes imperativas ---- */
   useImperativeHandle(ref, () => ({
@@ -375,45 +405,48 @@ const ArvoreCanvas = forwardRef(function ArvoreCanvas(
       s.folhas += (alvoFolhas - s.folhas) * (s.reduz ? 1 : 0.08)
       const mostrar = Math.round(s.folhas)
 
-      // Avanca a entrada da cor de cada competencia. So entra: nunca oscila.
-      const comp = s.competencias
-      for (const o of comp) o.m += (1 - o.m) * (s.reduz ? 1 : 0.035)
+      // Cross-fade entre o arranjo anterior e o atual de competencias.
+      s.cross += (1 - s.cross) * (s.reduz ? 1 : 0.04)
+      const bAntes = bandas(s.antes, s.total)
+      const bAtual = bandas(s.atual, s.total)
+      const emFade = s.cross < 0.999
 
+      const fila = []
       for (let i = 0; i < mostrar && i < total; i++) {
         const f = arv.pontas[i]
-        let viva = mix(pal.leafDeep, pal.leafLive, f.tom)
-        let flor = false
+        const base = mix(pal.leafDeep, pal.leafLive, f.tom)
+        const cAtual = corDaBanda(bAtual, f.sorte)
+        const cAntes = emFade ? corDaBanda(bAntes, f.sorte) : cAtual
 
-        // Cada competencia tem uma banda FIXA de `sorte`, dada pela posicao
-        // dela na lista completa de skills — nunca pelo subconjunto ja
-        // desbloqueado. Sem isso, desbloquear a 2a competencia reatribuiria
-        // parte das folhas da 1a: elas voltariam ao verde e so depois
-        // assumiriam a cor nova, um flash visivel a cada conquista.
-        for (let c = 0; c < comp.length; c++) {
-          const o = comp[c]
-          if (f.sorte >= o.lo && f.sorte < o.hi) {
-            // Mistura com a folhagem por baixo: copa colorida, nao confete.
-            viva = mix(viva, o.cor, 0.8 * o.m)
-            flor = o.m > 0.15
-            break
-          }
+        let viva = base
+        if (cAtual || cAntes) {
+          // 85% da cor da competencia sobre a folhagem por baixo: copa
+          // colorida, nao confete.
+          const vb = cAtual ? mix(base, cAtual, 0.85) : base
+          const va = cAntes ? mix(base, cAntes, 0.85) : base
+          viva = emFade ? mix(va, vb, s.cross) : vb
         }
 
         const morta = mix(pal.leafDead, pal.leafAsh, f.tom)
-        ctx.fillStyle = mix(viva, morta, Math.pow(seco, 0.8))
+        fila.push({ f, cor: mix(viva, morta, Math.pow(seco, 0.8)), flor: !!cAtual })
+      }
 
-        // A flor e um pouco maior e mais arredondada que a folha comum.
-        const rx = f.r * k * (0.7 + v * 0.45) * (flor ? 1.15 : 1)
-        const ry = f.r * k * (flor ? 0.62 : 0.5)
-
+      // As folhas coloridas vao por cima, para nao ficarem escondidas atras
+      // da folhagem verde.
+      const pintar = (d) => {
+        const rx = d.f.r * k * (0.7 + v * 0.45) * (d.flor ? 1.15 : 1)
+        const ry = d.f.r * k * (d.flor ? 0.62 : 0.5)
+        ctx.fillStyle = d.cor
         ctx.save()
-        ctx.translate(TX(f.x), TY(f.y))
-        ctx.rotate(f.a)
+        ctx.translate(TX(d.f.x), TY(d.f.y))
+        ctx.rotate(d.f.a)
         ctx.beginPath()
         ctx.ellipse(0, 0, rx, ry, 0, 0, 6.2832)
         ctx.fill()
         ctx.restore()
       }
+      for (const d of fila) if (!d.flor) pintar(d)
+      for (const d of fila) if (d.flor) pintar(d)
 
       // particulas
       for (let i = s.parts.length - 1; i >= 0; i--) {
