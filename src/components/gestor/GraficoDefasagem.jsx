@@ -3,7 +3,6 @@ import { useMedida } from '../../hooks/useMedida.js'
 import { Linha, useTooltip } from '../ui/Tooltip.jsx'
 
 const ALTURA = 268
-const PAD = { t: 22, r: 86, b: 34, l: 46 }
 const Y_MAX = 400
 const TICKS = [0, 100, 200, 300, 400]
 
@@ -13,12 +12,19 @@ const TICKS = [0, 100, 200, 300, 400]
  * Uma serie de dados (a turma) mais uma linha de REFERENCIA (a exigencia).
  * A referencia e cromo, nao serie — por isso fica em tinta recessiva, solida
  * (nunca tracejada) e com rotulo direto na ponta.
+ *
+ * O SVG e desenhado na largura real do container, sem viewBox. No celular a
+ * margem direita encolhe e o rotulo redundante da exigencia sai de cena: com
+ * 86 px reservados num cartao de ~300 px sobraria quase nada para a curva.
  */
 export default function GraficoDefasagem({ pontos }) {
   const [ref, largura] = useMedida()
   const tip = useTooltip()
 
-  const W = Math.max(320, largura - 24)
+  const W = Math.max(260, largura)
+  const estreito = W < 430
+  const PAD = { t: 22, r: estreito ? 30 : 86, b: 34, l: estreito ? 34 : 46 }
+
   const podeDesenhar = pontos.length >= 2 && largura > 0
 
   const x0 = podeDesenhar ? pontos[0].sem : 0
@@ -133,24 +139,28 @@ export default function GraficoDefasagem({ pontos }) {
               />
             ))}
 
-            {/* rotulos diretos so nas pontas */}
-            <text
-              x={X(ultimo.sem) + 10}
-              y={Y(ultimo.media) + 4}
-              fontSize="12"
-              fontWeight="600"
-              fill="var(--ink)"
-            >
-              {n0(ultimo.media)} h
-            </text>
-            <text
-              x={X(ultimo.sem) + 10}
-              y={Y(ultimo.meta) + 4}
-              fontSize="11.5"
-              fill="var(--muted)"
-            >
-              {n0(ultimo.meta)} h exig.
-            </text>
+            {/* rotulos diretos so nas pontas, e so quando ha margem para eles */}
+            {!estreito && (
+              <>
+                <text
+                  x={X(ultimo.sem) + 10}
+                  y={Y(ultimo.media) + 4}
+                  fontSize="12"
+                  fontWeight="600"
+                  fill="var(--ink)"
+                >
+                  {n0(ultimo.media)} h
+                </text>
+                <text
+                  x={X(ultimo.sem) + 10}
+                  y={Y(ultimo.meta) + 4}
+                  fontSize="11.5"
+                  fill="var(--muted)"
+                >
+                  {n0(ultimo.meta)} h exig.
+                </text>
+              </>
+            )}
 
             {/* alvos de hover bem maiores que os marcadores */}
             {pontos.map((p) => (
@@ -190,6 +200,7 @@ export default function GraficoDefasagem({ pontos }) {
         <span>
           <i style={{ '--k': 'var(--series)' }} />
           Média da turma
+          {estreito && ultimo ? ` · ${n0(ultimo.media)} h no ${ultimo.sem}º` : ''}
         </span>
         <span>
           <i style={{ '--k': 'var(--axis)' }} />

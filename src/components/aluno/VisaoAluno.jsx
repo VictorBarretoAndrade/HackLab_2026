@@ -4,7 +4,7 @@ import { skillPorId } from '../../data/skills.js'
 import { HORAS_EXTENSAO, NIVEIS, n0 } from '../../lib/curriculo.js'
 import { derivar, legendaArvore } from '../../lib/motorAluno.js'
 import { useAvisar } from '../ui/Toasts.jsx'
-import ArvoreCanvas from './ArvoreCanvas.jsx'
+import ArvoreCanvas, { COPA_COLORIDA } from './ArvoreCanvas.jsx'
 import ListaProjetos from './ListaProjetos.jsx'
 import PainelSkills from './PainelSkills.jsx'
 import Registro from './Registro.jsx'
@@ -62,11 +62,18 @@ export default function VisaoAluno() {
     return () => clearTimeout(id)
   }, [novas])
 
-  const chaveFrutos = d.ativas.map((s) => s.id).join(',')
-  const frutos = useMemo(
-    () => d.ativas.map((s) => ({ id: s.id, cor: s.cor })),
+  const chaveCompetencias = d.ativas.map((s) => s.id).join(',')
+  const competencias = useMemo(
+    () =>
+      d.ativas.map((s) => {
+        // Banda fixa da copa que esta competencia tinge, dada pela posicao dela
+        // na lista completa. Estavel: desbloquear outra nao remexe nesta.
+        const ordem = d.skills.findIndex((x) => x.id === s.id)
+        const passo = COPA_COLORIDA / d.skills.length
+        return { id: s.id, cor: s.cor, lo: ordem * passo, hi: (ordem + 1) * passo }
+      }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [chaveFrutos],
+    [chaveCompetencias],
   )
 
   const logar = useCallback((verbo, texto, cor) => {
@@ -116,13 +123,13 @@ export default function VisaoAluno() {
 
       ganhas.forEach((id) => {
         const s = skillPorId(id)
-        logar('Novo fruto', 'Soft skill ' + s.nome, s.cor)
+        logar('Nova cor', 'Soft skill ' + s.nome, s.cor)
         arvore.current?.faiscar(10, s.cor)
         setTimeout(() => avisar('Soft skill desbloqueada: ' + s.nome, s.cor), 260)
       })
       perdidas.forEach((id) => {
         const s = skillPorId(id)
-        logar('Fruto caiu', 'Soft skill ' + s.nome, 'var(--crit)')
+        logar('Cor apagou', 'Soft skill ' + s.nome, 'var(--crit)')
       })
     },
     [projetos, avisar, logar],
@@ -178,7 +185,7 @@ export default function VisaoAluno() {
             ref={arvore}
             crescimento={d.crescimento}
             vitalidade={d.vitalidade / 100}
-            frutos={frutos}
+            competencias={competencias}
             descricao={resumo}
           />
           <p className="palco-legenda">{legendaArvore(d)}</p>

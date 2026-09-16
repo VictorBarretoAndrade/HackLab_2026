@@ -164,6 +164,11 @@
   padding: 14px var(--pad) 8px;
 }
 
+
+/* Reserva espaco para o rotulo "meta 100%" acima da primeira barra. */
+.barras[data-meta='true'] {
+  padding-top: 34px;
+}
 .barra {
   display: grid;
   grid-template-columns: var(--namew) minmax(0, 1fr) var(--valw);
@@ -226,8 +231,8 @@
 /* Linha de meta: cai a 100/120 = 83,333% da pista. */
 .linha-meta {
   position: absolute;
-  top: 40px;
-  bottom: 30px;
+  top: 30px;
+  bottom: 12px;
   left: calc(
     var(--pad) + var(--namew) + var(--gap) +
       (100% - var(--pad) * 2 - var(--namew) - var(--valw) - var(--gap) * 2) * 0.83333

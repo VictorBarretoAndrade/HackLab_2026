@@ -42,7 +42,7 @@ export default function BarrasAderencia({ alunos }) {
       </div>
 
       {vista === 'grafico' ? (
-        <div className="barras">
+        <div className="barras" data-meta="true">
           {ordenado.length > 0 ? <div className="linha-meta" aria-hidden="true">
             <span>meta 100%</span>
           </div> : null}

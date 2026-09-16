@@ -4,8 +4,8 @@ Acompanhamento de projetos de extensão com desenvolvimento de soft skills, em
 duas visões que consomem o mesmo modelo de dados:
 
 - **Visão do aluno** — uma árvore desenhada em canvas que cresce com as horas
-  validadas, murcha com atrasos e ganha um fruto luminoso a cada competência
-  desbloqueada.
+  validadas, murcha com atrasos e tem as folhas tingidas pelas cores das competências
+  desbloqueadas.
 - **Visão da coordenação** — painel de aderência curricular da turma, com
   alertas acionáveis e evasão por projeto.
 

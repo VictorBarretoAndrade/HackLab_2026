@@ -1,4 +1,4 @@
-/** Bosque de competencias. Uma desbloqueada = um fruto luminoso na copa. */
+/** Bosque de competencias. Cada uma desbloqueada tinge uma faixa das folhas. */
 export default function PainelSkills({ skills, novas }) {
   const ativas = skills.filter((s) => s.ok).length
 
@@ -10,7 +10,7 @@ export default function PainelSkills({ skills, novas }) {
           <p className="sub">Cada competência exige 2 projetos concluídos que a exercitem.</p>
         </div>
         <span className="sub tnum">
-          {ativas} / {skills.length} · viram frutos na copa
+          {ativas} / {skills.length} · tingem a copa
         </span>
       </div>
 

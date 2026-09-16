@@ -10,17 +10,28 @@ import { mix, mulberry32, rgba, token } from '../../lib/cor.js'
  * particulas. As props so movem os ALVOS; os valores exibidos perseguem esses
  * alvos por interpolacao, e e isso que faz a arvore *crescer* em vez de
  * *saltar* de tamanho.
+ *
+ * AS COMPETENCIAS TINGEM A COPA. Cada soft skill desbloqueada pinta uma fatia
+ * das folhas com a sua cor. Nao existe fruto pulsando nem brilho piscando: a
+ * cor entra por interpolacao (~1 s) e depois fica parada. Quanto mais
+ * competencias, maior a fatia colorida da copa.
  */
 
 const SEMENTE = 20260916
 const TRONCO_U = 100 // tronco nominal, em unidades do espaco de geracao
 
 /**
+ * Fatia maxima da copa que pode ficar colorida, com TODAS as competencias
+ * desbloqueadas. O resto segue verde — senao a copa vira confete.
+ */
+export const COPA_COLORIDA = 0.7
+
+/**
  * Gera a arvore em ESPACO UNITARIO e acumula a bounding box.
  *
  * O desenho depois escala isso para caber no canvas. Foi essa mudanca que
  * corrigiu o bug em que a arvore nunca crescia: a versao anterior limitava o
- * tronco por `min(tronco, alturaMax * 0.6)` com `alturaMax = H - baseY - 26`,
+ * tronco por min(tronco, alturaMax * 0.6) com alturaMax = H - baseY - 26,
  * que e o espaco ABAIXO da base (~12 px) e nao acima. O tronco ficava travado
  * em ~7 px por mais horas que o aluno acumulasse.
  */
@@ -58,6 +69,10 @@ function gerar(growth, tempo, vento) {
           r: 5.5 + rnd() * 4,
           a: a + (rnd() - 0.5) * 1.6,
           tom: rnd(),
+          // Sorteio estavel que decide se esta folha vira flor de alguma
+          // competencia, e de qual. Como o PRNG tem semente fixa, a mesma
+          // folha recebe sempre a mesma competencia.
+          sorte: rnd(),
           dist: 0,
         })
         marcar(lx, ly)
@@ -77,7 +92,7 @@ function gerar(growth, tempo, vento) {
   ramo(0, 0, -Math.PI / 2, TRONCO_U, 9, prof)
 
   // Folhas ordenadas de dentro para fora: quando a vitalidade cai, as
-  // externas somem primeiro — que e como uma arvore seca de verdade.
+  // externas somem primeiro - que e como uma arvore seca de verdade.
   const cy = minY * 0.55
   for (const p of pontas) p.dist = p.x * p.x + (p.y - cy) * (p.y - cy)
   pontas.sort((a, b) => a.dist - b.dist)
@@ -86,7 +101,7 @@ function gerar(growth, tempo, vento) {
 }
 
 const ArvoreCanvas = forwardRef(function ArvoreCanvas(
-  { crescimento, vitalidade, frutos, descricao },
+  { crescimento, vitalidade, competencias, descricao },
   ref,
 ) {
   const cvRef = useRef(null)
@@ -95,7 +110,7 @@ const ArvoreCanvas = forwardRef(function ArvoreCanvas(
     v: 0.8,
     alvoG: 0.05,
     alvoV: 0.8,
-    frutos: [],
+    competencias: [],
     folhas: 0,
     pulso: 0,
     parts: [],
@@ -119,14 +134,15 @@ const ArvoreCanvas = forwardRef(function ArvoreCanvas(
     }
   }, [crescimento, vitalidade])
 
-  /* ---- frutos, preservando a animacao de entrada dos que ja existiam ---- */
+  /* ---- competencias, preservando a mistura ja alcancada pelas antigas ---- */
   useEffect(() => {
     const s = S.current
-    s.frutos = frutos.map((f) => {
-      const velho = s.frutos.find((o) => o.id === f.id)
-      return { id: f.id, cor: f.cor, pop: velho ? velho.pop : 0.15 }
+    s.competencias = competencias.map((c) => {
+      const velha = s.competencias.find((o) => o.id === c.id)
+      // m = quanto da cor ja entrou (0..1). As novas entram por interpolacao.
+      return { id: c.id, cor: c.cor, lo: c.lo, hi: c.hi, m: velha ? velha.m : 0 }
     })
-  }, [frutos])
+  }, [competencias])
 
   /* ---- acoes imperativas ---- */
   useImperativeHandle(ref, () => ({
@@ -228,18 +244,15 @@ const ArvoreCanvas = forwardRef(function ArvoreCanvas(
       ctx.fillStyle = ceu
       ctx.fillRect(0, 0, W, H)
 
-      // polen — so quando a arvore esta saudavel
+      // Polen: so quando a arvore esta saudavel. Alpha constante, sem cintilar.
       if (!s.reduz && v > 0.45) {
+        ctx.fillStyle = rgba(pal.leafLive, (v - 0.45) * 0.42)
         for (const p of s.poeira) {
           p.y -= p.v * 0.0016
           if (p.y < -0.04) {
             p.y = 1.04
             p.x = Math.random()
           }
-          ctx.fillStyle = rgba(
-            pal.leafLive,
-            (v - 0.45) * 0.5 * (0.5 + 0.5 * Math.sin(t * 0.001 + p.f)),
-          )
           ctx.beginPath()
           ctx.arc(p.x * W + Math.sin(t * 0.0006 + p.f) * 10, p.y * H, p.r, 0, 6.2832)
           ctx.fill()
@@ -286,7 +299,7 @@ const ArvoreCanvas = forwardRef(function ArvoreCanvas(
       ctx.fill()
       ctx.globalAlpha = 1
 
-      // raizes — crescem com as horas acumuladas
+      // raizes - crescem com as horas acumuladas
       const casca = mix(pal.barkLive, pal.barkDead, seco * 0.85)
       ctx.strokeStyle = casca
       ctx.globalAlpha = 0.3 + v * 0.18
@@ -308,7 +321,7 @@ const ArvoreCanvas = forwardRef(function ArvoreCanvas(
       }
       ctx.globalAlpha = 1
 
-      // pulso de crescimento
+      // Pulso de crescimento: transitorio, so ao concluir um projeto.
       if (s.pulso > 0) {
         s.pulso = Math.max(0, s.pulso - 0.015)
         const p = 1 - s.pulso
@@ -362,49 +375,44 @@ const ArvoreCanvas = forwardRef(function ArvoreCanvas(
       s.folhas += (alvoFolhas - s.folhas) * (s.reduz ? 1 : 0.08)
       const mostrar = Math.round(s.folhas)
 
+      // Avanca a entrada da cor de cada competencia. So entra: nunca oscila.
+      const comp = s.competencias
+      for (const o of comp) o.m += (1 - o.m) * (s.reduz ? 1 : 0.035)
+
       for (let i = 0; i < mostrar && i < total; i++) {
         const f = arv.pontas[i]
-        const viva = mix(pal.leafDeep, pal.leafLive, f.tom)
+        let viva = mix(pal.leafDeep, pal.leafLive, f.tom)
+        let flor = false
+
+        // Cada competencia tem uma banda FIXA de `sorte`, dada pela posicao
+        // dela na lista completa de skills — nunca pelo subconjunto ja
+        // desbloqueado. Sem isso, desbloquear a 2a competencia reatribuiria
+        // parte das folhas da 1a: elas voltariam ao verde e so depois
+        // assumiriam a cor nova, um flash visivel a cada conquista.
+        for (let c = 0; c < comp.length; c++) {
+          const o = comp[c]
+          if (f.sorte >= o.lo && f.sorte < o.hi) {
+            // Mistura com a folhagem por baixo: copa colorida, nao confete.
+            viva = mix(viva, o.cor, 0.8 * o.m)
+            flor = o.m > 0.15
+            break
+          }
+        }
+
         const morta = mix(pal.leafDead, pal.leafAsh, f.tom)
         ctx.fillStyle = mix(viva, morta, Math.pow(seco, 0.8))
+
+        // A flor e um pouco maior e mais arredondada que a folha comum.
+        const rx = f.r * k * (0.7 + v * 0.45) * (flor ? 1.15 : 1)
+        const ry = f.r * k * (flor ? 0.62 : 0.5)
+
         ctx.save()
         ctx.translate(TX(f.x), TY(f.y))
         ctx.rotate(f.a)
         ctx.beginPath()
-        ctx.ellipse(0, 0, f.r * k * (0.7 + v * 0.45), f.r * k * 0.5, 0, 0, 6.2832)
+        ctx.ellipse(0, 0, rx, ry, 0, 0, 6.2832)
         ctx.fill()
         ctx.restore()
-      }
-
-      // frutos: uma competencia desbloqueada = um fruto luminoso
-      for (let i = 0; i < s.frutos.length; i++) {
-        const o = s.frutos[i]
-        o.pop += (1 - o.pop) * 0.1
-        const idx = Math.min(
-          total - 1,
-          Math.floor(total * (0.35 + 0.58 * ((i + 0.5) / s.frutos.length))),
-        )
-        const anc = arv.pontas[idx]
-        if (!anc) continue
-        const bob = s.reduz ? 0 : Math.sin(t * 0.0016 + i * 1.7) * 2.2
-        const fx = TX(anc.x)
-        const fy = TY(anc.y) + bob
-        const rr = (5.5 + 2.5 * g) * o.pop
-        const gg = ctx.createRadialGradient(fx, fy, 0, fx, fy, rr * 3.4)
-        gg.addColorStop(0, rgba(o.cor, 0.75))
-        gg.addColorStop(1, rgba(o.cor, 0))
-        ctx.fillStyle = gg
-        ctx.beginPath()
-        ctx.arc(fx, fy, rr * 3.4, 0, 6.2832)
-        ctx.fill()
-        ctx.fillStyle = o.cor
-        ctx.beginPath()
-        ctx.arc(fx, fy, rr, 0, 6.2832)
-        ctx.fill()
-        ctx.fillStyle = 'rgba(255,255,255,.55)'
-        ctx.beginPath()
-        ctx.arc(fx - rr * 0.3, fy - rr * 0.35, rr * 0.28, 0, 6.2832)
-        ctx.fill()
       }
 
       // particulas

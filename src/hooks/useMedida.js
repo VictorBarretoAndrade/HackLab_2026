@@ -6,6 +6,12 @@ import { useEffect, useRef, useState } from 'react'
  * Graficos SVG precisam da largura real em pixels: usar viewBox com
  * preserveAspectRatio="none" distorceria o texto dos eixos, e um viewBox fixo
  * encolheria a tipografia junto com o cartao.
+ *
+ * A largura devolvida e SEMPRE a do content box (ja sem o padding do
+ * elemento). O ResizeObserver dispara uma vez no observe(), entao nao ha
+ * medicao inicial separada — usar getBoundingClientRect aqui devolveria a
+ * largura do border box e o grafico nasceria com 24 px a mais do que cabe,
+ * estourando o cartao no celular.
  */
 export function useMedida() {
   const ref = useRef(null)
@@ -20,7 +26,6 @@ export function useMedida() {
       setLargura((antes) => (antes === w ? antes : w))
     })
     ro.observe(el)
-    setLargura(Math.round(el.getBoundingClientRect().width))
 
     return () => ro.disconnect()
   }, [])

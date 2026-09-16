@@ -2,7 +2,7 @@
  * As seis competencias, compartilhadas pelas duas visoes.
  *
  * A COR e o elo visual entre as telas: a mesma cor aparece no ponto da tag do
- * projeto, no icone do card de competencia e no fruto luminoso da copa. O
+ * projeto, no icone do card de competencia e nas folhas que ela tinge na copa. O
  * gestor ve a mesma cor na cobertura da turma.
  */
 
