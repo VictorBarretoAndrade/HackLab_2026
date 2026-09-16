@@ -30,15 +30,27 @@ export default function TabelaProjetos({ projetos }) {
             </tr>
           </thead>
           <tbody>
+            {/* data-rot vira o rotulo de cada linha quando a tabela
+                se transforma em lista de cartoes no celular. */}
             {projetos.map((p) => (
               <tr key={p.nome}>
-                <td>{p.nome}</td>
-                <td style={{ color: 'var(--ink-2)' }}>{p.area}</td>
-                <td className="n">{p.insc}</td>
-                <td className="n">{p.concl}</td>
-                <td className="n">{p.atras}</td>
-                <td className="n">{p.aband}</td>
-                <td>
+                <td className="titulo">{p.nome}</td>
+                <td style={{ color: 'var(--ink-2)' }} data-rot="Área">
+                  {p.area}
+                </td>
+                <td className="n" data-rot="Inscritos">
+                  {p.insc}
+                </td>
+                <td className="n" data-rot="Concluíram">
+                  {p.concl}
+                </td>
+                <td className="n" data-rot="Atrasados">
+                  {p.atras}
+                </td>
+                <td className="n" data-rot="Abandonos">
+                  {p.aband}
+                </td>
+                <td data-rot="Evasão">
                   <span className="minibar" data-alerta={String(p.evasao >= 35)}>
                     <i style={{ width: (p.evasao / maxEvasao) * 100 + '%' }} />
                   </span>

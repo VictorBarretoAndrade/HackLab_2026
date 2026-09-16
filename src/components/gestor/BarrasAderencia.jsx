@@ -108,16 +108,30 @@ export default function BarrasAderencia({ alunos }) {
               </tr>
             </thead>
             <tbody>
+              {/* data-rot vira o rotulo de cada linha quando a tabela
+                  se transforma em lista de cartoes no celular. */}
               {ordenado.map((a) => (
                 <tr key={a.mat}>
-                  <td>{a.nome}</td>
-                  <td className="mono">{a.mat}</td>
-                  <td className="n">{a.sem}º</td>
-                  <td className="n">{n0(a.horas)} h</td>
-                  <td className="n">{n0(a.meta)} h</td>
-                  <td className="n">{Math.round(a.aderencia)}%</td>
-                  <td className="n">{a.restam > 0 ? `${n1(a.ritmo)} h` : '—'}</td>
-                  <td>
+                  <td className="titulo">{a.nome}</td>
+                  <td className="mono" data-rot="Matrícula">
+                    {a.mat}
+                  </td>
+                  <td className="n" data-rot="Semestre">
+                    {a.sem}º
+                  </td>
+                  <td className="n" data-rot="Horas">
+                    {n0(a.horas)} h
+                  </td>
+                  <td className="n" data-rot="Esperado">
+                    {n0(a.meta)} h
+                  </td>
+                  <td className="n" data-rot="Aderência">
+                    {Math.round(a.aderencia)}%
+                  </td>
+                  <td className="n" data-rot="Ritmo nec.">
+                    {a.restam > 0 ? `${n1(a.ritmo)} h` : '—'}
+                  </td>
+                  <td data-rot="Situação">
                     <Chip tom={TOM[a.faixa]} Icone={ICONE_FAIXA[a.faixa]}>
                       {ROTULO_FAIXA[a.faixa]}
                     </Chip>
