@@ -333,8 +333,10 @@ export default function VisaoAluno() {
           />
         </div>
         <div className="aluno-col">
-          <Jardim jardim={jardim} estado={estado} acoes={jardimUI} />
+          {/* As competencias vem primeiro: sao elas que tingem a copa logo
+              acima, entao ficam o mais perto possivel da arvore. */}
           <PainelSkills skills={d.skills} novas={novas} />
+          <Jardim jardim={jardim} estado={estado} acoes={jardimUI} />
           <Registro itens={registro} />
         </div>
       </div>
