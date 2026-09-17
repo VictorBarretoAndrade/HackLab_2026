@@ -12,7 +12,7 @@ import ListaProjetos from './ListaProjetos.jsx'
 import PainelSkills from './PainelSkills.jsx'
 import Registro from './Registro.jsx'
 
-const CHAVE = 'raiz:projetos'
+const CHAVE = 'mytree:projetos'
 
 const VERBO = {
   concluido: { v: 'Concluído', cor: 'var(--good)' },

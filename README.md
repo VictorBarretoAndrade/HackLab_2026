@@ -1,4 +1,4 @@
-# Raiz — Extensão Universitária Gamificada
+# MyTree — Extensão Universitária Gamificada
 
 Acompanhamento de projetos de extensão com desenvolvimento de soft skills, em
 duas visões que consomem o mesmo modelo de dados:
@@ -26,7 +26,7 @@ O repositório já traz o workflow pronto. São três passos, **uma vez só**:
    ```bash
    git init
    git add .
-   git commit -m "Raiz: visao do aluno e da coordenacao"
+   git commit -m "MyTree: visao do aluno e da coordenacao"
    git branch -M main
    git remote add origin https://github.com/SEU-USUARIO/SEU-REPO.git
    git push -u origin main

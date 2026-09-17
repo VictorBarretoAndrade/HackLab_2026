@@ -1,6 +1,6 @@
 # Contexto do projeto — como chegamos aqui
 
-Histórico de decisões e armadilhas do desenvolvimento do **Raiz**. Serve para
+Histórico de decisões e armadilhas do desenvolvimento do **MyTree**. Serve para
 quem precisa retomar o projeto sem reconstruir o raciocínio do zero.
 
 Complementa os outros três documentos, que descrevem o produto pronto:
@@ -49,6 +49,13 @@ ff73b15  Jardim: capina semanal, moedas e lojinha de enfeites
 fae67af  Redisparar publicacao apos trocar a fonte do Pages para GitHub Actions
 dbef0f0  Raiz: acompanhamento gamificado de extensao universitaria
 ```
+
+O projeto se chamava **Raiz** até depois do último commit da lista — daí o nome
+antigo aparecer no histórico. A renomeação para **MyTree** trocou também o
+prefixo das chaves de `localStorage` (`raiz:` → `mytree:`), o que **zera o
+estado de quem já estava testando**: projetos, jardim, tema e tutorial voltam ao
+início. Numa build de teste isso é aceitável; num produto com usuários reais
+exigiria migração das chaves antigas.
 
 ---
 

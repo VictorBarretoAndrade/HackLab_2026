@@ -12,7 +12,7 @@ import {
   tirarTodos,
 } from '../lib/jardim.js'
 
-const CHAVE = 'raiz:jardim'
+const CHAVE = 'mytree:jardim'
 
 function carregar() {
   try {

@@ -7,7 +7,7 @@ import Tutorial from './components/ui/Tutorial.jsx'
 import VisaoAluno from './components/aluno/VisaoAluno.jsx'
 import VisaoGestor from './components/gestor/VisaoGestor.jsx'
 
-const CHAVE_TUTORIAL = 'raiz:tutorial'
+const CHAVE_TUTORIAL = 'mytree:tutorial'
 
 const VISOES = {
   aluno: { rotulo: 'Aluno', Icone: Arvore },
@@ -84,7 +84,7 @@ export default function App() {
                 <Arvore style={{ color: 'var(--surface)' }} />
               </span>
               <span>
-                <b>Raiz</b>
+                <b>MyTree</b>
                 <span>Extensão universitária gamificada</span>
               </span>
             </div>

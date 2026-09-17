@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const CHAVE = 'raiz:tema'
+const CHAVE = 'mytree:tema'
 
 /**
  * Tres estados: 'light', 'dark' e 'system'.
